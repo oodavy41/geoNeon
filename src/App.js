@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as THREE from "three";
-import mapVec from "./geoJsons/worldMap.json";
+import mapVec from "./geoJsons/countries.json";
 import rivers from "./geoJsons/rivers.json";
 import lakes from "./geoJsons/lakes.json";
 import "./App.css";
@@ -8,12 +8,17 @@ import drawThreeGeo from "./threeGeoJson";
 import "./settings";
 import millerXY from "./millerTransformer.js";
 import seaLine from "./object/seaLine.js";
-import launcher from "./particle/launcher.js";
+import earthLand from "./object/earthLand.js";
+import lineLauncher from "./particle/lineLauncher.js";
+import Stats from "stats-js";
+import FragFactory from "./textRenderer/fragFactory.js";
 
+const SET = global.Sets;
 class App extends Component {
   constructor(props) {
     super(props);
     this.container = null;
+    this.canvas2 = null;
     this.cvWidth = 0;
     this.cvHeight = 0;
     this.scene = null;
@@ -26,67 +31,104 @@ class App extends Component {
   componentDidMount() {
     this.init();
 
-    drawThreeGeo(mapVec, 180, "plane", { color: global.Sets.geoColor }, this.scene);
-    drawThreeGeo(rivers, 180, "plane", { color: global.Sets.waterColor }, this.scene);
-    drawThreeGeo(lakes, 180, "plane", { color: global.Sets.waterColor }, this.scene);
+    var boxsize = 999999;
 
-    let pos = [];
-    let mat = new THREE.PointsMaterial({ color: 0xaaffff });
-    let geo = new THREE.Geometry();
-    global.Sets.cities.forEach((e, i) => {
-      let cood = millerXY(e[4], -e[3]);
-      geo.vertices.push(new THREE.Vector3(cood.x, e[5], -cood.y));
-      let p = new THREE.Points(geo, mat);
-      // this.scene.add(p);
-
-      if (i % 1995 === 0) {
-        pos.push(new THREE.Vector2(cood.x, -cood.y));
+    let light = new THREE.DirectionalLight(SET.sunLightColor);
+    this.scene.add(light);
+    this.objs.push({
+      obj: light,
+      update: (time, context) => {
+        context.obj.position.set(3 * Math.cos(time / 900), 3 * Math.sin(time / 900), 1);
       }
     });
-    let bz = new THREE.SplineCurve(pos);
-    let points = bz.getPoints(100);
-    points = points.map(e => {
-      return new THREE.Vector3(e.x, 0, e.y);
-    });
+
+    var lighttarget = new THREE.Mesh(
+      new THREE.BoxGeometry(boxsize, boxsize, boxsize),
+      new THREE.MeshBasicMaterial({ color: "#ff0000" })
+    );
+    lighttarget.position.set(0, 0, 0);
+    this.scene.add(lighttarget);
+    light.target = lighttarget;
+
+    var envlight = new THREE.AmbientLight(SET.sunLightColor); // soft white light
+    this.scene.add(envlight);
+
+    let world = drawThreeGeo(mapVec, 1, "plane", ["ATA", "GRL"]);
+    // drawThreeGeo(rivers, 1, "plane", { color: SET.waterColor }, this.scene);
+    // drawThreeGeo(lakes, 1, "plane", { color: SET.waterColor }, this.scene);
+    let worldTex = new THREE.TextureLoader().load("earthNightMap.png");
+    worldTex.magFilter = THREE.NearestMipMapNearestFilter;
+    let worldNormal = new THREE.TextureLoader().load("earthNormalMap.png");
+    worldNormal.magFilter = THREE.NearestMipMapLinearFilter;
+    let worldOBJ = new earthLand(world, SET.geoLineColor, worldTex, worldNormal);
+    this.scene.add(worldOBJ.getObj());
+
+    let pos = SET.sealines;
 
     let spriteTex = new THREE.TextureLoader().load("steam.png");
-    for (let i = 0; i < 1; i++) {
-      let boat = new THREE.Mesh(new THREE.SphereGeometry(200000), new THREE.MeshBasicMaterial({ color: "#ffddee" }));
-      let spriteLauncher = new launcher(spriteTex, "#ffffff", this.scene);
+    for (let i = 0; i < pos.length; i++) {
+      let coords = pos[i].map(e => {
+        let xy = millerXY(e[1], e[0]);
+        return new THREE.Vector2(xy[0], xy[1]);
+      });
+      let color = SET.boatColors[parseInt(Math.random() * SET.boatColors.length)];
+      let boat = new THREE.Sprite(new THREE.SpriteMaterial({ map: spriteTex, color: color, transparent: true }));
+      boat.scale.set(SET.boatSize, SET.boatSize, SET.boatSize);
+
+      let spriteLauncher = new lineLauncher(color, this.scene);
       boat.add(spriteLauncher);
 
-      let sl = new seaLine(points, "#FFaabb", boat, spriteLauncher);
-      this.scene.add(sl.getObj());
-      this.scene.add(sl.getCurve());
+      let textFrag = this.textFactory.frag("line" + i, 14, "#f4f4f4");
+
+      boat.add(textFrag.obj);
+
+      let sl = new seaLine(coords, "#FFaabb", boat, spriteLauncher);
+      this.scene.add(boat);
+      // this.scene.add(sl.getCurve());
     }
     this.renderer.render(this.scene, this.camera);
-    this.update();
+    this.update(0);
   }
 
   init() {
+    this.stats = new Stats();
+    this.container.appendChild(this.stats.dom);
+
     this.cvWidth = this.container.clientWidth;
     this.cvHeight = this.container.clientHeight;
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, this.cvWidth / this.cvHeight, 1, 100000000000000000);
-    this.camera.position.set(global.Sets.center[0], 40000000, global.Sets.center[1]);
-    this.camera.lookAt(global.Sets.center[0], 0, global.Sets.center[1]);
+
+    let centerX = SET.center[0] * SET.widthScale,
+      centerY = SET.center[1] * SET.heightScale;
+    this.camera = new THREE.PerspectiveCamera(40, this.cvWidth / this.cvHeight, 1, 100000000000000000);
+    this.camera.position.set(centerX, centerY, 40000000);
+    this.camera.lookAt(centerX, centerY, 0);
+
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setClearColor(global.Sets.background);
+    this.renderer.setClearColor(SET.backgroundColor);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.cvWidth, this.cvHeight);
+
     this.container.appendChild(this.renderer.domElement);
     var directionalLight = new THREE.DirectionalLight(0xffffff);
     this.scene.add(directionalLight);
+
+    this.textFactory = new FragFactory();
+    this.canvas2.appendChild(this.textFactory.canvas);
   }
 
   update(t) {
+    this.stats.begin();
+
+    //=================
     this.renderer.clear();
     this.objs.forEach(e => {
-      let cube = e;
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      e.update(t, e);
     });
     this.renderer.render(this.scene, this.camera);
+    //==================
+
+    this.stats.end();
     this.animationID = requestAnimationFrame(t => this.update(t));
   }
 
@@ -94,6 +136,7 @@ class App extends Component {
     return (
       <div className="App">
         <div ref={ref => (this.container = ref)} style={{ width: "1440px", height: "900px" }} />
+        <div ref={ref => (this.canvas2 = ref)} />
       </div>
     );
   }

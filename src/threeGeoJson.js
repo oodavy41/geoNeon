@@ -1,15 +1,9 @@
-/* Draw GeoJSON
-
-Iterates through the latitude and longitude values, converts the values to XYZ coordinates,
-and draws the geoJSON geometries.
-
-*/
-
-import * as THREE from "three";
+import * as poly2tri from "poly2tri";
 import millerXY from "./millerTransformer";
-export default function drawThreeGeo(json, radius, shape, materalOptions, container) {
-  container = container || window.scene;
 
+export default function drawThreeGeo(json, radius, shape, exception) {
+  const AREA_CODE = "ISO_A3";
+  var geometries = [];
   var x_values = [];
   var y_values = [];
   var z_values = [];
@@ -22,56 +16,89 @@ export default function drawThreeGeo(json, radius, shape, materalOptions, contai
   //Re-usable array to hold coordinate values. This is necessary so that you can add
   //interpolated coordinates. Otherwise, lines go through the sphere instead of wrapping around.
 
+  //THREEMAP
+  // let worldTex = new THREE.TextureLoader().load("earthDayMap.jpg");
+  // let mat = new THREE.MeshBasicMaterial({ map: worldTex, color: "00ff00" });
+
   for (var geom_num = 0; geom_num < json_geom.length; geom_num++) {
-    if (json_geom[geom_num].type == "Point") {
-      convertCoordinates(json_geom[geom_num].coordinates, radius);
-      drawParticle(x_values[0], y_values[0], z_values[0], materalOptions);
-    } else if (json_geom[geom_num].type == "MultiPoint") {
-      for (var point_num = 0; point_num < json_geom[geom_num].coordinates.length; point_num++) {
-        convertCoordinates(json_geom[geom_num].coordinates[point_num], radius);
-        drawParticle(x_values[0], y_values[0], z_values[0], materalOptions);
+    let code = json_geom[geom_num].code;
+    if (exception && exception.includes(code)) {
+      continue;
+    }
+    switch (json_geom[geom_num].geometry.type) {
+      case "Point": {
+        convertCoordinates(json_geom[geom_num].geometry.coordinates, radius);
+        let point = drawParticle(x_values[0], y_values[0], z_values[0]);
+        geometries.push({ type: "point", geometry: point });
+        break;
       }
-    } else if (json_geom[geom_num].type == "LineString") {
-      coordinate_array = createCoordinateArray(json_geom[geom_num].coordinates);
-
-      for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
-        convertCoordinates(coordinate_array[point_num], radius);
+      case "MultiPoint": {
+        for (var point_num = 0; point_num < json_geom[geom_num].geometry.coordinates.length; point_num++) {
+          convertCoordinates(json_geom[geom_num].geometry.coordinates[point_num], radius);
+          let point = drawParticle(x_values[0], y_values[0], z_values[0]);
+          geometries.push({ type: "point", geometry: point });
+        }
+        break;
       }
-      drawLine(x_values, y_values, z_values, materalOptions);
-    } else if (json_geom[geom_num].type == "Polygon") {
-      for (var segment_num = 0; segment_num < json_geom[geom_num].coordinates.length; segment_num++) {
-        coordinate_array = createCoordinateArray(json_geom[geom_num].coordinates[segment_num]);
-
+      case "LineString": {
+        coordinate_array = createCoordinateArray(json_geom[geom_num].geometry.coordinates);
         for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
           convertCoordinates(coordinate_array[point_num], radius);
         }
-        drawLine(x_values, y_values, z_values, materalOptions);
+        geometries.push({ type: "line", geometry: drawLine(x_values, y_values, z_values) });
+        break;
       }
-    } else if (json_geom[geom_num].type == "MultiLineString") {
-      for (var segment_num = 0; segment_num < json_geom[geom_num].coordinates.length; segment_num++) {
-        coordinate_array = createCoordinateArray(json_geom[geom_num].coordinates[segment_num]);
-
-        for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
-          convertCoordinates(coordinate_array[point_num], radius);
+      case "Polygon": {
+        for (var segment_num = 0; segment_num < json_geom[geom_num].geometry.coordinates.length; segment_num++) {
+          coordinate_array = createCoordinateArray(json_geom[geom_num].geometry.coordinates[segment_num]);
+          let dic = {};
+          for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
+            let cood = coordinate_array[point_num];
+            if (!dic[cood[0] + "" + cood[1]]) {
+              dic[cood[0] + "" + cood[1]] = true;
+              convertCoordinates(cood, radius);
+            }
+          }
+          geometries.push({ type: "mesh", geometry: drawFace(x_values, y_values, z_values) });
+          geometries.push({ type: "line", geometry: drawLine(x_values, y_values, z_values) });
         }
-        drawLine(x_values, y_values, z_values, materalOptions);
+        break;
       }
-    } else if (json_geom[geom_num].type == "MultiPolygon") {
-      for (var polygon_num = 0; polygon_num < json_geom[geom_num].coordinates.length; polygon_num++) {
-        for (var segment_num = 0; segment_num < json_geom[geom_num].coordinates[polygon_num].length; segment_num++) {
-          coordinate_array = createCoordinateArray(json_geom[geom_num].coordinates[polygon_num][segment_num]);
+      case "MultiLineString": {
+        for (var segment_num = 0; segment_num < json_geom[geom_num].geometry.coordinates.length; segment_num++) {
+          coordinate_array = createCoordinateArray(json_geom[geom_num].geometry.coordinates[segment_num]);
 
           for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
             convertCoordinates(coordinate_array[point_num], radius);
           }
-          drawLine(x_values, y_values, z_values, materalOptions);
+          geometries.push({ type: "line", geometry: drawLine(x_values, y_values, z_values) });
         }
+        break;
       }
-    } else {
-      throw new Error("The geoJSON is not valid.");
+      case "MultiPolygon": {
+        for (var polygon_num = 0; polygon_num < json_geom[geom_num].geometry.coordinates.length; polygon_num++) {
+          for (var segment_num = 0; segment_num < json_geom[geom_num].geometry.coordinates[polygon_num].length; segment_num++) {
+            coordinate_array = json_geom[geom_num].geometry.coordinates[polygon_num][segment_num];
+            let dic = {};
+            for (var point_num = 0; point_num < coordinate_array.length; point_num++) {
+              let cood = coordinate_array[point_num];
+              if (!dic[cood[0] + "" + cood[1]]) {
+                dic[cood[0] + "" + cood[1]] = true;
+                convertCoordinates(cood, radius);
+              }
+            }
+            geometries.push({ type: "mesh", geometry: drawFace(x_values, y_values, z_values) });
+            geometries.push({ type: "line", geometry: drawLine(x_values, y_values, z_values) });
+          }
+        }
+        break;
+      }
+      default: {
+        throw new Error("The geoJSON is not valid.");
+        break;
+      }
     }
   }
-
   function createGeometryArray(json) {
     var geometry_array = [];
 
@@ -79,7 +106,10 @@ export default function drawThreeGeo(json, radius, shape, materalOptions, contai
       geometry_array.push(json.geometry);
     } else if (json.type == "FeatureCollection") {
       for (var feature_num = 0; feature_num < json.features.length; feature_num++) {
-        geometry_array.push(json.features[feature_num].geometry);
+        geometry_array.push({
+          geometry: json.features[feature_num].geometry,
+          code: json.features[feature_num].properties[AREA_CODE]
+        });
       }
     } else if (json.type == "GeometryCollection") {
       for (var geom_num = 0; geom_num < json.geometries.length; geom_num++) {
@@ -198,49 +228,80 @@ export default function drawThreeGeo(json, radius, shape, materalOptions, contai
     var lon = coordinates_array[0];
     var lat = coordinates_array[1];
 
-    z_values.push((lat / 180) * radius);
-    y_values.push((lon / 180) * radius);
+    y_values.push(lon * radius);
+    z_values.push(lat * radius);
   }
 
-  function drawParticle(x, y, z, options) {
-    var particle_geom = new THREE.Geometry();
-    particle_geom.vertices.push(new THREE.Vector3(x, y, z));
-
-    var particle_material = new THREE.ParticleSystemMaterial(options);
-
-    var particle = new THREE.ParticleSystem(particle_geom, particle_material);
-    container.add(particle);
-
-    clearArrays();
+  function drawParticle(x, y, z) {
+    var particle_geom = [];
+    particle_geom.vertices.push({ x, y, z });
+    return particle_geom;
   }
 
-  function drawLine(x_values, y_values, z_values, options) {
-    var line_geom = new THREE.Geometry();
+  function drawLine(x_values, y_values, z_values) {
+    var line_geom = [];
     createVertexForEachPoint(line_geom, x_values, y_values, z_values);
-
-    var line_material = new THREE.LineBasicMaterial(options);
-    var line = new THREE.Line(line_geom, line_material);
-    container.add(line);
-
     clearArrays();
+    return line_geom;
   }
 
   function createVertexForEachPoint(object_geometry, values_axis1, values_axis2, values_axis3) {
     if (shape === "sphere") {
-      for (var i = 0; i < values_axis1.length; i++) {
-        object_geometry.vertices.push(new THREE.Vector3(values_axis1[i], values_axis2[i], values_axis3[i]));
+      for (let i = 0; i < values_axis1.length; i++) {
+        object_geometry.push({ x: values_axis1[i], y: values_axis2[i], z: values_axis3[i] });
       }
     } else {
-      for (var i = 0; i < values_axis2.length; i++) {
-        let xy = millerXY(values_axis2[i], -values_axis3[i]);
-        object_geometry.vertices.push(new THREE.Vector3(xy.x, 0, -xy.y));
+      for (let i = 0; i < values_axis2.length; i++) {
+        let xy = millerXY(values_axis2[i], values_axis3[i]);
+        object_geometry.push({ x: xy[0], y: xy[1], z: 0 });
       }
     }
   }
 
-  function clearArrays() {
-    x_values.length = 0;
-    y_values.length = 0;
-    z_values.length = 0;
+  function drawFace(x_values, y_values, z_values) {
+    let face_geom,
+      p2tPoints = [],
+      vertices = [],
+      uvs = [],
+      faces = [];
+    for (let i = 0; i < y_values.length; i++) {
+      let lon = y_values[i],
+        lat = z_values[i],
+        uvx = lon / 360 + 0.5,
+        uvy = lat / 180 + 0.5,
+        xy = millerXY(lon, lat);
+      p2tPoints.push({ x: xy[0], y: -xy[1], index: i });
+      if (shape === "plane") {
+        vertices.push(xy[0], xy[1], 0);
+      } else {
+        vertices.push(x_values[i], y_values[i], z_values[i]);
+      }
+      uvs.push(uvx, uvy);
+    }
+    let triangles;
+    if (p2tPoints.length >= 3) {
+      try {
+        let tri = new poly2tri.SweepContext(p2tPoints);
+        tri.triangulate();
+        triangles = tri.getTriangles();
+      } catch (err) {
+        console.log(err);
+      }
+      if (triangles) {
+        triangles.forEach(e => {
+          for (let i = 2; i >= 0; i--) {
+            faces.push(e.points_[i].index);
+          }
+        });
+        face_geom = { face: faces, position: vertices, uv: uvs };
+      }
+    }
+    return face_geom;
   }
+  function clearArrays() {
+    x_values = [];
+    y_values = [];
+    z_values = [];
+  }
+  return geometries;
 }
