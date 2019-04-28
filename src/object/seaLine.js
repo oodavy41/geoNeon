@@ -45,11 +45,13 @@ export default class seaLine {
       });
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
-        new THREE.LineBasicMaterial({
+        new THREE.LineDashedMaterial({
           color: color,
           transparent: true,
           linewidth: SET.trailWidth,
-          opacity: 0.3
+          opacity: 0.5,
+          gapSize: 27000000000
+          //dashSize: 50000000000
         })
       );
 

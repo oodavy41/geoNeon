@@ -94,7 +94,7 @@
     });
     map.add(marker);
     coords.push({coord:[lng,lat],marker:marker})
-    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[0]},${e.coord[1]}]`}).join(",");
+    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[1]},${e.coord[0]},]`}).join(",");
   }
 
   var auto = new AMap.Autocomplete({

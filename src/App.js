@@ -82,9 +82,11 @@ class App extends Component {
 
       boat.add(textFrag.obj);
 
-      let sl = new seaLine(coords, "#FFaabb", boat, spriteLauncher);
+      let sl = new seaLine(coords, SET.geoLineColor, boat, spriteLauncher);
       this.scene.add(boat);
-      // this.scene.add(sl.getCurve());
+      sl.curves.forEach(e => {
+        this.scene.add(e);
+      });
     }
     this.renderer.render(this.scene, this.camera);
     this.update(0);
