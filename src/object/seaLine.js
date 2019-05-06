@@ -4,9 +4,9 @@ import "../settings";
 
 const SET = global.Sets;
 export default class seaLine {
-  constructor(points, color, boat, pl) {
+  constructor(points, color, boat, pls) {
     this.boat = boat;
-    this.launcher = pl;
+    this.launcher = pls;
     this.curves = [];
     this.pointArray = [];
     this.curveArray = [];
@@ -41,19 +41,18 @@ export default class seaLine {
       let bz = new THREE.SplineCurve(points[i]);
       let bzPoints = bz.getPoints(100);
       bzPoints = bzPoints.map(e => {
-        return new THREE.Vector3(e.x, e.y, 1000);
+        return new THREE.Vector3(e.x, e.y, 1);
       });
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
         new THREE.LineDashedMaterial({
           color: color,
           transparent: true,
-          linewidth: SET.trailWidth,
           opacity: 0.5,
-          gapSize: 27000000000
-          //dashSize: 50000000000
+          dashSize: 1
         })
       );
+      curve.computeLineDistances();
 
       this.curves.push(curve);
       this.curveLength.push(bz.getLength());
@@ -64,28 +63,46 @@ export default class seaLine {
 
   play(index) {
     let i = index % this.curveArray.length;
+    if (i === 0) {
+      if (this.launcher) {
+        this.launcher.forEach(e => {
+          e.complete && e.complete();
+          e.switch && e.switch(0);
+        });
+      }
+    }
     let bzPoints = this.curveArray[i];
     this.boat.position.copy(bzPoints[0]);
     let points = bzPoints.map((e, i) => {
       let { x, y, z } = e;
-      return { x, y, z };
+      let length = 0;
+      if (i !== 0) {
+        let pre = bzPoints[i - 1];
+        let dx = pre.x - x;
+        let dy = pre.y - y;
+        let dz = pre.z - z;
+        length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      }
+      return { x, y, z, duration: length / SET.sealineSpeed };
     });
     let target = points[0];
     let ani = anime({
       targets: target,
       keyframes: points,
-      duration: Math.max(10000, this.curveLength[i] / SET.sealineSpeed),
       loop: false,
       endDelay: i === this.curveArray.length - 1 ? 2000 : 0,
       easing: "linear",
       direction: "alternate",
       update: a => {
-        this.boat.position.set(target.x, target.y, target.z);
-        if (this.launcher) {
-          this.launcher.update();
-        }
+        this.boat.position.set(target.x, target.y, target.z + 0.5);
+        this.launcher.forEach(e => {
+          e.update && e.update();
+        });
       },
       complete: a => {
+        this.launcher.forEach(e => {
+          e.switch && e.switch(i + 1);
+        });
         this.anime = this.play(i + 1);
       }
     });

@@ -1,4 +1,7 @@
 import * as THREE from "three";
+import "../settings";
+
+let SET = global.Sets;
 export default class TextFrag extends THREE.Sprite {
   constructor(factory, index, text, size = undefined, color = undefined) {
     super(new THREE.SpriteMaterial({ map: factory.tex, transparent: true }));
@@ -54,7 +57,9 @@ export default class TextFrag extends THREE.Sprite {
     textgeo.addAttribute("position", new THREE.BufferAttribute(new Float32Array(spritePos), 3));
     textgeo.addAttribute("uv", new THREE.BufferAttribute(new Float32Array(this.uvs), 2));
     this.geometry = textgeo;
-    this.scale.set(0.1, 0.1, 0.1);
+    this.scale.set(SET.textScale / SET.boatSize, SET.textScale / SET.boatSize, SET.textScale / SET.boatSize);
+    this.position.y = 0.5;
+    this.position.z = 0.5;
     return this;
   }
 }

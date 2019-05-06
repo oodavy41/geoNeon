@@ -44,7 +44,7 @@ function Mesh(e, that) {
     map: that.landTex,
     normalMap: that.normalTex,
     normalMapType: THREE.ObjectSpaceNormalMap,
-    shininess: 32
+    shininess: 4
   });
   that.mesh.add(new THREE.Mesh(face_geom, mat));
 }

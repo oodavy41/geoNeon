@@ -16,8 +16,8 @@ export default class particle {
     let dx = Math.cos(rad) * opt.start * 0.1;
     let dy = Math.sin(rad) * opt.start * 0.1;
     pos.x += dx;
-    pos.y += rad;
-    pos.z -= dy;
+    pos.y += dy;
+    pos.z += 0.5;
     this.sprite.position.copy(pos);
     scene.add(this.sprite);
     let t = { start: opt.start };
@@ -25,7 +25,7 @@ export default class particle {
       targets: t,
       start: opt.end,
       round: 1,
-      easing: "linear",
+      easing: "easeOutSine",
       duration: opt.life,
       update: a => {
         this.sprite.scale.set(t.start, t.start, t.start);

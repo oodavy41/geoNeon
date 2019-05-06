@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "animejs": "^3.0.1",
+    "antd": "^3.16.6",
     "cdt2d": "^1.0.0",
     "poly2tri": "^1.5.0",
     "react": "^16.8.6",

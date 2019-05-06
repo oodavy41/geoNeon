@@ -25,23 +25,26 @@ export default class FragFactory {
   redraw() {
     if (this.modify) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      let yoffset = 0;
+      this.ctx.fillStyle = "rgba(30,30,30,0.5)";
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      let yoffset = 10;
       this.ctx.textBaseline = "top";
       for (let i = 0; i < this.frags.length; i++) {
         let frag = this.frags[i];
         this.ctx.fillStyle = frag.color;
         this.ctx.font = frag.size + "px Fira Sans";
-        let textWidth = this.ctx.measureText(frag.text);
-        this.ctx.fillText(frag.text, 0, yoffset);
+        let text = " " + frag.text + " ";
+        let textWidth = this.ctx.measureText(text);
+        this.ctx.fillText(text, 0, yoffset);
         frag.uvs = [
           0,
-          1 - (yoffset + frag.size) / this.canvas.height,
+          1 - (yoffset + frag.size - 4) / this.canvas.height,
           textWidth.width / this.canvas.width,
-          1 - (yoffset + frag.size) / this.canvas.height,
+          1 - (yoffset + frag.size - 4) / this.canvas.height,
           textWidth.width / this.canvas.width,
-          1 - yoffset / this.canvas.height,
+          1 - (yoffset - 4) / this.canvas.height,
           0,
-          1 - yoffset / this.canvas.height
+          1 - (yoffset - 4) / this.canvas.height
         ];
         yoffset += frag.size;
         frag.height = frag.size;
