@@ -5,10 +5,12 @@ import "../settings";
 let SET = global.Sets;
 
 export default class particleLauncher extends THREE.Object3D {
-  constructor(texture, color, scene, options = {}) {
+  constructor(texture, color, parent, scene, options = {}) {
     super();
+    this.layers = parent.layers;
     this.texture = texture;
     this.color = color;
+    this.parent = parent;
     this.scene = scene;
     this.option = {
       start: SET.boatSize * SET.particleScale,
@@ -33,6 +35,7 @@ export default class particleLauncher extends THREE.Object3D {
       }
     }
   }
+
   fire() {
     if (this.popQueue.length === 0 || this.popQueue[0].alive) {
       this.popQueue.push(
@@ -43,11 +46,12 @@ export default class particleLauncher extends THREE.Object3D {
             transparent: true,
             opacity: SET.particleOpacity
           }),
-          this
-        ).aweak(this.scene, this.option)
+          this,
+          this.parent
+        ).aweak(this.scene, this.parent, this.option)
       );
     } else {
-      this.popQueue.push(this.popQueue.shift().aweak(this.scene, this.option));
+      this.popQueue.push(this.popQueue.shift().aweak(this.scene, this.parent, this.option));
     }
   }
 }

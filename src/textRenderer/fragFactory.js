@@ -15,8 +15,9 @@ export default class FragFactory {
     this.frags = [];
   }
 
-  frag(text, size = undefined, color = undefined) {
+  frag(parent, text, size = undefined, color = undefined) {
     let frag = new textFrag(this, this.frags.length, text, size || this.defaultFont, color || this.defaultColor);
+    frag.layers = parent.layers;
     this.frags.push(frag);
     this.redraw();
     return frag;

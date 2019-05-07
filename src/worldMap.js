@@ -65,36 +65,51 @@ export default class WorldMap extends Component {
     let worldOBJ = new earthLand(world, SET.geoLineColor, worldTex, worldNormal);
     this.scene.add(worldOBJ.getObj());
 
-    let pos = SET.sealines;
-
+    let pos = this.props.sealine;
     let spriteTex = new THREE.TextureLoader().load("steam.png");
+
     for (let i = 0; i < pos.length; i++) {
-      let coords = pos[i].map(e => {
+      let coords = pos[i].points.map(e => {
         let xy = millerXY(e[1], e[0]);
         return new THREE.Vector2(xy[0], xy[1]);
       });
+      let layer = pos[i].layerMask;
       let color = SET.boatColors[parseInt(Math.random() * SET.boatColors.length)];
       let boat = new THREE.Sprite(new THREE.SpriteMaterial({ map: spriteTex, color: color, transparent: true }));
+      boat.layers.set(layer);
+      this.camera.layers.enable(layer);
       boat.scale.set(SET.boatSize, SET.boatSize, SET.boatSize);
 
       // let spriteLauncher = new lineLauncher(color, this.scene);
       // boat.add(spriteLauncher);
       let trail = new lineTrail(color, this.scene, boat);
 
-      let particleLauncher = new ParticleLauncher(spriteTex, color, this.scene);
+      let particleLauncher = new ParticleLauncher(spriteTex, color, boat, this.scene);
       boat.add(particleLauncher);
 
-      let textFrag = this.textFactory.frag("line" + i, 44, "#f4f4f4");
+      let textFrag = this.textFactory.frag(boat, "line" + i, 44, "#f4f4f4");
       boat.add(textFrag.obj);
 
       let sl = new seaLine(coords, SET.geoLineColor, boat, [particleLauncher, trail]);
-      this.scene.add(boat);
-      sl.curves.forEach(e => {
-        this.scene.add(e);
-      });
+      sl.show(this.scene);
+      pos[i]["sealine"] = sl;
     }
     this.renderer.render(this.scene, this.camera);
     this.update(0);
+  }
+
+  componentDidUpdate() {
+    let maskList = this.props.areaMask;
+    let areaCode = this.props.pickArea;
+    let mask = maskList[areaCode];
+    if (!mask) {
+      for (let i = 0; i < 32; i++) {
+        this.camera.layers.enable(i);
+      }
+    } else {
+      this.camera.layers.set(mask);
+    }
+    this.camera.layers.enable(0);
   }
 
   init() {

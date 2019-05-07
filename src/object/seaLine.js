@@ -111,4 +111,17 @@ export default class seaLine {
   getCurve() {
     return this.curve;
   }
+  show(scene) {
+    scene.add(this.boat);
+    this.curves.forEach(e => {
+      scene.add(e);
+    });
+  }
+
+  hide(scene) {
+    scene.remove(this.boat);
+    this.curves.forEach(e => {
+      scene.remove(e);
+    });
+  }
 }

@@ -2,8 +2,8 @@ import * as THREE from "three";
 import "../settings";
 
 export default class lineTrail {
-  constructor(color, scene, head) {
-    this.head = head;
+  constructor(color, scene, parent) {
+    this.parent = parent;
     this.color = color;
     this.scene = scene;
     this.curves = [];
@@ -12,7 +12,7 @@ export default class lineTrail {
 
   update() {
     let now = new THREE.Vector3();
-    now.copy(this.head.position);
+    now.copy(this.parent.position);
     this.curves[this.index].points.push(now);
     this.curves[this.index].obj.geometry.setFromPoints(this.curves[this.index].points);
     this.curves[this.index].obj.geometry.verticesNeedUpdate = true;
@@ -27,6 +27,7 @@ export default class lineTrail {
         opacity: global.Sets.trailOpacity
       });
       let line = new THREE.Line(geo, mat);
+      line.layers = this.parent.layers;
       this.curves[index] = { obj: line, points: [] };
     }
     this.curves[index].obj.geometry.setFromPoints(this.curves[this.index].points);

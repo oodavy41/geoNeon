@@ -6,14 +6,14 @@ export default class DayPicker extends Component {
     this.state = {
       day: 0
     };
-    this.days = ["All", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"];
+    this.days = [ "Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun","All",];
   }
 
   render() {
     return (
       <div id="day_pick">
         {this.days.map((e, i) => (
-          <div class="picker">
+          <div className="picker" key={i}>
             <input type="radio" name="day" key={i} value={i} checked />
             <span>{e}</span>
           </div>

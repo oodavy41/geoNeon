@@ -18,8 +18,7 @@
   line-height: 40px;
   color: aliceblue;
   position: absolute;
-  margin-top: -45px;
-  margin-left: 5px;
+  margin-left: -100px;
 }
 
 #line_pick input:hover {

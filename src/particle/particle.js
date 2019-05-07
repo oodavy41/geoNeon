@@ -8,7 +8,7 @@ export default class particle {
     this.alive = false;
     this.launcher = launcher;
   }
-  aweak(scene, opt) {
+  aweak(scene, parent, opt) {
     this.alive = true;
     let pos = new THREE.Vector3();
     this.launcher.getWorldPosition(pos);
@@ -20,6 +20,7 @@ export default class particle {
     pos.z += 0.5;
     this.sprite.position.copy(pos);
     scene.add(this.sprite);
+    this.sprite.layers = parent.layers;
     let t = { start: opt.start };
     this.anime = anime({
       targets: t,

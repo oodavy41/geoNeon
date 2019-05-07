@@ -3,8 +3,9 @@ import lineParticle from "./lineParticle";
 import "../settings";
 
 export default class lineLauncher extends THREE.Object3D {
-  constructor(color, scene) {
+  constructor(color, scene, parent) {
     super();
+    this.layers = parent.layers;
     this.color = color;
     this.scene = scene;
     this.last = null;
@@ -24,9 +25,10 @@ export default class lineLauncher extends THREE.Object3D {
             transparent: true,
             linewidth: global.Sets.trailWidth
           }),
-          this.scene
+          this.scene,
+          this.parent
         );
-        this.scene.add(l);
+        this.add(l);
       }
     } else {
       this.last = new THREE.Vector3();

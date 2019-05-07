@@ -1,0 +1,42 @@
+#rightPanel {
+  width: 500px;
+  border-radius: 5px;
+  position: fixed;
+  top: 80px;
+  right: 80px;
+  background: rgba(50, 100, 150, 0.4);
+}
+
+#areaTitle {
+  font-size: 20px;
+  line-height: 40px;
+}
+#tagPanel {
+  width: 450px;
+  margin: 25px;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 400px;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide div {
+  font-size: 14px;
+  color: #fff;
+}
+.ant-table-small {
+  border: 0;
+}
+
+.ant-table-tbody :hover {
+  color: rgb(50, 100, 150);
+}
+
+.ant-tag {
+  color: aliceblue;
+  background: rgba(50, 100, 150, 0.2);
+  margin: 5px;
+  border: 0;
+}

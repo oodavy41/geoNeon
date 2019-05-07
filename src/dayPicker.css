@@ -17,8 +17,7 @@
   line-height: 80px;
   color: aliceblue;
   position: absolute;
-  margin-top: -83px;
-  margin-left: 5px;
+  margin-left: -80px;
 }
 
 #day_pick input:hover {
