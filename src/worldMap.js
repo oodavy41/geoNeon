@@ -48,7 +48,7 @@ export default class WorldMap extends Component {
       new THREE.BoxGeometry(boxsize, boxsize, boxsize),
       new THREE.MeshBasicMaterial({ color: "#ff0000" })
     );
-    lighttarget.position.set(0, 0, 0);
+    lighttarget.position.set(1, 1, 1);
     //this.scene.add(lighttarget);
     light.target = lighttarget;
 
@@ -73,11 +73,12 @@ export default class WorldMap extends Component {
         let xy = millerXY(e[1], e[0]);
         return new THREE.Vector2(xy[0], xy[1]);
       });
-      let layer = pos[i].layerMask;
       let color = SET.boatColors[parseInt(Math.random() * SET.boatColors.length)];
       let boat = new THREE.Sprite(new THREE.SpriteMaterial({ map: spriteTex, color: color, transparent: true }));
-      boat.layers.set(layer);
-      this.camera.layers.enable(layer);
+
+      let { areaC, compC, day } = pos[i];
+      boat["sealineInfo"] = { areaC, compC, day };
+
       boat.scale.set(SET.boatSize, SET.boatSize, SET.boatSize);
 
       // let spriteLauncher = new lineLauncher(color, this.scene);
@@ -99,17 +100,25 @@ export default class WorldMap extends Component {
   }
 
   componentDidUpdate() {
-    let maskList = this.props.areaMask;
-    let areaCode = this.props.pickArea;
-    let mask = maskList[areaCode];
-    if (!mask) {
-      for (let i = 0; i < 32; i++) {
-        this.camera.layers.enable(i);
+    let flag = this.props.pickState;
+    let handeler = e => {
+      if (e.children || e.children.length > 0) {
+        e.children.forEach(handeler);
       }
-    } else {
-      this.camera.layers.set(mask);
-    }
-    this.camera.layers.enable(0);
+      let eflag = e.sealineInfo;
+
+      if (!eflag) return;
+
+      e.layers.set(1);
+      if (
+        (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
+        (eflag.day === flag.pickDay || flag.pickDay === 7) &&
+        (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+      ) {
+        e.layers.set(0);
+      }
+    };
+    this.scene.children.forEach(handeler);
   }
 
   init() {
@@ -157,7 +166,7 @@ export default class WorldMap extends Component {
   render() {
     return (
       <div className="App">
-        <div ref={ref => (this.container = ref)} style={{ width: "3440px", height: "2160px" }} />
+        <div ref={ref => (this.container = ref)} style={{ width: "1920px", height: "990px" }} />
         <div ref={ref => (this.canvas2 = ref)} />
       </div>
     );

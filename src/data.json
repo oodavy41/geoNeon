@@ -13,12 +13,13 @@
       [52.083949, -37.4863],
       [51.595214, -55.240206]
     ],
-    "lineC": "HBD",
-    "lineN": "洋浦中诚台湾线",
-    "compC": "洋浦中诚",
-    "compN": "CUL",
-    "areaN": "中国台湾",
-    "areaC": "TW"
+    "day": 1,
+    "lineC": "RES2",
+    "lineN": "OA联盟（达飞、中远、东方）太平红海线",
+    "compN": "太平",
+    "compC": "PIL",
+    "areaN": "波斯湾",
+    "areaC": "BSW"
   },
   {
     "points": [
@@ -42,12 +43,13 @@
       [36.477175, -36.895276],
       [46.455454, -59.92262]
     ],
-    "lineC": "FE4(W)",
-    "lineN": "THE联盟（赫伯罗特）欧洲线",
-    "compC": "赫伯罗特",
-    "compN": "HLC",
-    "areaN": "西北欧",
-    "areaC": "EU"
+    "day": 1,
+    "lineC": "MED2",
+    "lineN": "OA联盟（达飞、东方海外）地中海线",
+    "compN": "达飞",
+    "compC": "CMA",
+    "areaN": "地中海",
+    "areaC": "MD"
   },
   {
     "points": [
@@ -61,10 +63,11 @@
       [31.786082, -43.411542],
       [35.587636, -5.794354]
     ],
-    "lineC": "CIX",
-    "lineN": "现代印度线",
-    "compC": "现代商船",
-    "compN": "HMM",
+    "day": 6,
+    "lineC": "KCM",
+    "lineN": "高丽、德翔、现代东南亚线",
+    "compN": "现代商船",
+    "compC": "HMM",
     "areaN": "东南亚",
     "areaC": "ES"
   },
@@ -79,12 +82,13 @@
       [29.722461, -121.592999],
       [29.109991, -115.616437]
     ],
-    "lineC": "PAS",
-    "lineN": "阳明、以星东南亚线",
-    "compC": "阳明",
-    "compN": "YML",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 5,
+    "lineC": "PN3",
+    "lineN": "THE联盟(赫伯、ONE、阳明)美西北线",
+    "compN": "海洋网联",
+    "compC": "ONE",
+    "areaN": "美西",
+    "areaC": "EAW"
   },
   {
     "points": [
@@ -96,12 +100,13 @@
       [19.8728, 115.839907],
       [22.49495, 113.203188]
     ],
-    "lineC": "AS1A",
-    "lineN": "美总、达飞、马士基中东线",
-    "compC": "达飞",
-    "compN": "CMA",
-    "areaN": "波斯湾",
-    "areaC": "BSW"
+    "day": 6,
+    "lineC": "USEC2",
+    "lineN": "2M（马士基、地中海）美东线",
+    "compN": "地中海",
+    "compC": "MSC",
+    "areaN": "美东",
+    "areaC": "EAM"
   },
   {
     "points": [
@@ -117,12 +122,13 @@
       [-6.220292, -87.153607],
       [-11.084623, -77.66142]
     ],
-    "lineC": "CTS",
-    "lineN": "阳明、以星、东方海外东南亚线",
-    "compC": "阳明",
-    "compN": "YML",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 6,
+    "lineC": "NEU6",
+    "lineN": "2M(马士基、地中海)欧洲线",
+    "compN": "马士基海陆",
+    "compC": "MSKL",
+    "areaN": "西北欧",
+    "areaC": "EU"
   },
   {
     "points": [
@@ -136,10 +142,11 @@
       [-44.436136, 22.998065],
       [-34.128179, 27.041034]
     ],
-    "lineC": "PS5",
-    "lineN": "THE联盟（阳明、赫伯）美西南线",
-    "compC": "阳明",
-    "compN": "YML",
+    "day": 4,
+    "lineC": "USWC2",
+    "lineN": "2M（马士基、地中海）美西线",
+    "compN": "地中海",
+    "compC": "MSC",
     "areaN": "美西",
     "areaC": "EAW"
   },
@@ -152,12 +159,13 @@
       [-40.539272, -18.158093],
       [-32.796975, 17.5255]
     ],
-    "lineC": "NV1B",
-    "lineN": "马士基、德翔、阳明东南亚线",
-    "compC": "马士基海陆",
-    "compN": "MSKL",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 5,
+    "lineC": "AR1",
+    "lineN": "THE联盟（阳明、ONE、万海）红海线",
+    "compN": "万海航运",
+    "compC": "WHLL",
+    "areaN": "波斯湾",
+    "areaC": "BSW"
   },
   {
     "points": [
@@ -176,12 +184,13 @@
       [2.384364, 141.501407],
       [-3.676875, 144.138126]
     ],
-    "lineC": "KSH",
-    "lineN": "高丽、天敬海防线",
-    "compC": "天敬海运",
-    "compN": "CKS",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 3,
+    "lineC": "PSW2",
+    "lineN": "OA联盟（中远）美西南线",
+    "compN": "中远海",
+    "compC": "COSCO",
+    "areaN": "美西",
+    "areaC": "EAW"
   },
   {
     "points": [
@@ -208,10 +217,11 @@
       [-39.425141, 152.348533],
       [-37.8139966, 144.9633179]
     ],
-    "lineC": "MED5",
-    "lineN": "OA联盟（达飞、长荣、中远、东方海外）地中海线",
-    "compC": "中远海",
-    "compN": "COSCO",
+    "day": 2,
+    "lineC": "MED4",
+    "lineN": "OA联盟（长荣、中远、东方海外）地中海线",
+    "compN": "东方海外",
+    "compC": "OOCL",
     "areaN": "地中海",
     "areaC": "MD"
   },
@@ -236,12 +246,13 @@
       [-7.363416, 174.936643],
       [35.45, 139.6499939]
     ],
-    "lineC": "FAX",
-    "lineN": "以星、ONE、中远印度线",
-    "compC": "中远海",
-    "compN": "COSCO",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 5,
+    "lineC": "MD2",
+    "lineN": "THE联盟（赫伯、ONE、阳明）地中海线",
+    "compN": "海洋网联",
+    "compC": "ONE",
+    "areaN": "地中海",
+    "areaC": "MD"
   },
   {
     "points": [
@@ -266,12 +277,13 @@
       [30.867197, 122.214549],
       [31.065027, 121.93989]
     ],
-    "lineC": "RES1",
-    "lineN": "OA联盟（中远、长荣、达飞）太平红海线",
-    "compC": "长荣",
-    "compN": "EMC",
-    "areaN": "波斯湾",
-    "areaC": "BSW"
+    "day": 5,
+    "lineC": "USWC4",
+    "lineN": "马士基、以星美西线",
+    "compN": "以星",
+    "compC": "ZIM",
+    "areaN": "美西",
+    "areaC": "EAW"
   },
   {
     "points": [
@@ -300,12 +312,13 @@
       [2.151303, 154.100579],
       [30.352612, 121.800775]
     ],
-    "lineC": "MED2",
-    "lineN": "OA联盟（达飞、东方海外）地中海线",
-    "compC": "东方海外",
-    "compN": "OOCL",
-    "areaN": "地中海",
-    "areaC": "MD"
+    "day": 3,
+    "lineC": "NEU-1",
+    "lineN": "OA联盟（东方海外、中远）欧洲线",
+    "compN": "东方海外",
+    "compC": "OOCL",
+    "areaN": "西北欧",
+    "areaC": "EU"
   },
   {
     "points": [
@@ -316,12 +329,13 @@
       [-4.37161, 110.247363],
       [-6.689708, 108.533496]
     ],
-    "lineC": "PH5",
-    "lineN": "马士基（MCC）东南亚线",
-    "compC": "马士基海陆",
-    "compN": "MSKL",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 3,
+    "lineC": "CLX",
+    "lineN": "美森美西线",
+    "compN": "美森",
+    "compC": "MATSON",
+    "areaN": "美西",
+    "areaC": "EAW"
   },
   {
     "points": [
@@ -335,12 +349,13 @@
       [-8.392771, -93.327924],
       [-2.796835, -80.320111]
     ],
-    "lineC": "KPS",
-    "lineN": "高丽、兴亚东南亚线",
-    "compC": "高丽海运",
-    "compN": "KMTC",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 1,
+    "lineC": "SKZC",
+    "lineN": "东映韩国线",
+    "compN": "东映海运",
+    "compC": "DYA",
+    "areaN": "韩国",
+    "areaC": "KR"
   },
   {
     "points": [
@@ -351,12 +366,13 @@
       [30.289426, 124.805621],
       [24.678963, 121.509723]
     ],
-    "lineC": "AIPX",
-    "lineN": "总、马士基、中远海东南亚线",
-    "compC": "中远海",
-    "compN": "COSCO",
-    "areaN": "东南亚",
-    "areaC": "ES"
+    "day": 1,
+    "lineC": "CAT",
+    "lineN": "阳明、长荣、太平、外运、德翔澳洲线",
+    "compN": "德翔",
+    "compC": "TSC",
+    "areaN": "澳洲",
+    "areaC": "AU"
   },
   {
     "points": [
@@ -367,12 +383,13 @@
       [45.068281, -136.863995],
       [40.156413, -124.559308]
     ],
-    "lineC": "ALX1",
-    "lineN": "ONE、赫伯、现代南美线",
-    "compC": "现代商船",
-    "compN": "HMM",
-    "areaN": "南美",
-    "areaC": "SAM"
+    "day": 3,
+    "lineC": "PCI(N)",
+    "lineN": "长锦、天敬、兴亚韩国线",
+    "compN": "天敬海运",
+    "compC": "CKS",
+    "areaN": "韩国",
+    "areaC": "KR"
   },
   {
     "points": [
@@ -385,29 +402,32 @@
       [-17.560247, 158.027344],
       [-32.583849, 152.402344]
     ],
-    "lineC": "CTS1",
-    "lineN": "中远、正利、太平东南亚线",
-    "compC": "正利航业",
-    "compN": "CNC",
+    "day": 5,
+    "lineC": "EMP",
+    "lineN": "以星美西线",
+    "compN": "以星",
+    "compC": "ZIM",
+    "areaN": "美西",
+    "areaC": "EAW"
+  },
+  {
+    "points": [[45.089036, -0.878906], [42.032974, -38.847656], [41.640078, -70.488281]],
+    "day": 2,
+    "lineC": "HHX",
+    "lineN": "亚海、德翔东南亚线",
+    "compN": "德翔",
+    "compC": "TSC",
     "areaN": "东南亚",
     "areaC": "ES"
   },
   {
-    "points": [[45.089036, -0.878906], [42.032974, -38.847656], [41.640078, -70.488281]],
-    "lineC": "MD1",
-    "lineN": "THE联盟（赫伯、ONE、阳明）地中海线",
-    "compC": "赫伯罗特",
-    "compN": "HLC",
-    "areaN": "地中海",
-    "areaC": "MD"
-  },
-  {
     "points": [[34.488448, 126.474609], [29.152161, 128.364258], [35.173808, 139.702148]],
-    "lineC": "AUS-2",
-    "lineN": "中远、东方海外、澳航澳洲线",
-    "compC": "东方海外",
-    "compN": "OOCL",
-    "areaN": "澳洲",
-    "areaC": "AU"
+    "day": 5,
+    "lineC": "FEW2",
+    "lineN": "马士基西非线",
+    "compN": "马士基海陆",
+    "compC": "MSKL",
+    "areaN": "非洲",
+    "areaC": "AF"
   }
 ]

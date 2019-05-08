@@ -8,9 +8,9 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pickDay: 0,
-      pickArea: 0,
-      random: 0
+      pickDay: 7, //0-7
+      pickArea: "All", //area code
+      pickComps: [] //picked company codes
     };
     this.areas = {};
     this.areaHash = {};
@@ -18,7 +18,7 @@ export default class App extends Component {
       if (!this.areas[e.areaC]) {
         this.areas[e.areaC] = Object.keys(this.areas).length + 1;
       }
-      let obj = { layerMask: this.areas[e.areaC], ...e };
+      let obj = e;
 
       if (!this.areaHash[e.areaC]) {
         this.areaHash[e.areaC] = [];
@@ -32,13 +32,21 @@ export default class App extends Component {
     this.setState({ pickArea: area });
   }
 
+  onPickDay(day) {
+    this.setState({ pickDay: day });
+  }
+
+  onPickComp(comps) {
+    this.setState({ pickComps: comps });
+  }
+
   render() {
     return (
       <div>
-        <WorldMap sealine={this.sealineData} areaMask={this.areas} pickArea={this.state.pickArea} />
-        <DayPicker />
-        <LinePicker areaInfo={this.areaHash} onchange={area => this.onPickArea(area)} />
-        <APanel areaInfo={this.areaHash} />
+        <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} />
+        <DayPicker onchange={v => this.onPickDay(v)} />
+        <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
+        <APanel areaInfo={this.areaHash} onchange={v => this.onPickComp(v)} />
       </div>
     );
   }

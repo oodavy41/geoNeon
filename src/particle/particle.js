@@ -13,23 +13,24 @@ export default class particle {
     let pos = new THREE.Vector3();
     this.launcher.getWorldPosition(pos);
     let rad = Math.random() * Math.PI;
-    let dx = Math.cos(rad) * opt.start * 0.1;
-    let dy = Math.sin(rad) * opt.start * 0.1;
+    let dx = Math.cos(rad) * opt.start * 0.05;
+    let dy = Math.sin(rad) * opt.start * 0.05;
     pos.x += dx;
     pos.y += dy;
     pos.z += 0.5;
     this.sprite.position.copy(pos);
     scene.add(this.sprite);
     this.sprite.layers = parent.layers;
-    let t = { start: opt.start };
+    let t = { start: opt.start * 100 };
     this.anime = anime({
       targets: t,
-      start: opt.end,
+      start: opt.end * 100,
       round: 1,
       easing: "easeOutSine",
       duration: opt.life,
       update: a => {
-        this.sprite.scale.set(t.start, t.start, t.start);
+        let _ = t.start / 100;
+        this.sprite.scale.set(_, _, _);
       },
       complete: a => {
         this.alive = false;

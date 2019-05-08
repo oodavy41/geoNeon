@@ -10,7 +10,7 @@ export default class lineParticle extends THREE.Line {
 
     line.vertices.push(v1, v2);
     super(line, mat);
-    this.layers = parent.layers;
+    this.sealineInfo = parent.sealineInfo;
     let target = { opacity: 100 };
     this.anime = anime({
       targets: target,

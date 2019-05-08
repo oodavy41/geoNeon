@@ -7,9 +7,20 @@
   background: rgba(50, 100, 150, 0.4);
 }
 
+#rightPanel .ant-tag-checkable {
+  padding: 1px 7px;
+  background: rgba(50, 100, 150, 0.8);
+}
+
+#rightPanel .ant-tag-checkable-checked {
+  padding: 0px 6px;
+  border: 1px solid rgba(240, 248, 255, 0.5);
+  background: rgba(50, 100, 150, 0.8);
+}
+
 #areaTitle {
-  font-size: 20px;
-  line-height: 40px;
+  font-size: 22px;
+  line-height: 50px;
 }
 #tagPanel {
   width: 450px;
@@ -26,12 +37,24 @@
   font-size: 14px;
   color: #fff;
 }
+
 .ant-table-small {
   border: 0;
 }
 
-.ant-table-tbody :hover {
+#rightPanel table {
+  border: 2px solid rgb(50, 100, 150);
+}
+
+.ant-table-tbody tr:hover {
   color: rgb(50, 100, 150);
+}
+
+.ant-table-tbody tr:nth-child(odd) {
+  background: rgba(52, 108, 141, 0.6);
+}
+.ant-table-tbody tr:nth-child(even) {
+  background: rgba(48, 49, 128, 0.6);
 }
 
 .ant-tag {

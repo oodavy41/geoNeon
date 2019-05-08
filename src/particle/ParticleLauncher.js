@@ -7,14 +7,14 @@ let SET = global.Sets;
 export default class particleLauncher extends THREE.Object3D {
   constructor(texture, color, parent, scene, options = {}) {
     super();
-    this.layers = parent.layers;
+    this.sealineInfo = parent.sealineInfo;
     this.texture = texture;
     this.color = color;
     this.parent = parent;
     this.scene = scene;
     this.option = {
       start: SET.boatSize * SET.particleScale,
-      end: 0,
+      end: 0.0000001,
       delta: SET.particleFireTime,
       life: SET.particleLife,
       autoPlay: true

@@ -5,7 +5,7 @@ import "../settings";
 export default class lineLauncher extends THREE.Object3D {
   constructor(color, scene, parent) {
     super();
-    this.layers = parent.layers;
+    this.sealineInfo = parent.sealineInfo;
     this.color = color;
     this.scene = scene;
     this.last = null;

@@ -10,9 +10,9 @@ global.Sets = {
 
   sealineSpeed: earthS / 90000,
 
-  particleFireTime: 60,
-  particleLife: 2000,
-  particleOpacity: 0.3,
+  particleFireTime: 50,
+  particleLife: 1500,
+  particleOpacity: 0.5,
   particleScale: 1.1,
 
   boatSize: 1.8,

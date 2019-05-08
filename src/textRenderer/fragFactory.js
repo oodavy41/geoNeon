@@ -17,7 +17,7 @@ export default class FragFactory {
 
   frag(parent, text, size = undefined, color = undefined) {
     let frag = new textFrag(this, this.frags.length, text, size || this.defaultFont, color || this.defaultColor);
-    frag.layers = parent.layers;
+    frag.sealineInfo = parent.sealineInfo;
     this.frags.push(frag);
     this.redraw();
     return frag;
