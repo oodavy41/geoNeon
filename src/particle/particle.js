@@ -17,7 +17,6 @@ export default class particle {
     let dy = Math.sin(rad) * opt.start * 0.05;
     pos.x += dx;
     pos.y += dy;
-    pos.z += 0.5;
     this.sprite.position.copy(pos);
     scene.add(this.sprite);
     this.sprite.layers = parent.layers;

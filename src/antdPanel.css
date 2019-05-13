@@ -1,32 +1,88 @@
 #rightPanel {
-  width: 500px;
+  height: 260px;
   border-radius: 5px;
   position: fixed;
-  top: 80px;
-  right: 80px;
-  background: rgba(50, 100, 150, 0.4);
+  top: 780px;
+  left: 220px;
+  background: rgba(111, 133, 255, 0);
 }
 
 #rightPanel .ant-tag-checkable {
   padding: 1px 7px;
-  background: rgba(50, 100, 150, 0.8);
+  background: rgba(111, 133, 255, 0.2);
 }
 
 #rightPanel .ant-tag-checkable-checked {
   padding: 0px 6px;
   border: 1px solid rgba(240, 248, 255, 0.5);
-  background: rgba(50, 100, 150, 0.8);
+  background: rgba(111, 133, 255, 0.2);
+}
+
+#rightPanel .ant-table-body {
+  background: rgba(0, 0, 0, 0);
+}
+
+#rightPanel .ant-table-scroll ::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+#linePanel {
+  widows: 500px;
+  float: left;
 }
 
 #areaTitle {
+  color: aliceblue;
+  background: rgba(111, 133, 255, 0.2);
+  text-align: center;
+  float: left;
+  width: 80px;
+  height: 240px;
+  margin: 10px;
   font-size: 22px;
   line-height: 50px;
+  padding: 40px 0;
 }
 #tagPanel {
-  width: 450px;
-  margin: 25px;
+  background: rgba(111, 133, 255, 0.1);
+  float: left;
+  height: 240px;
+  width: 400px;
+  margin: 10px;
+  padding: 10px;
+}
+#tagIcon {
+  width: 400px;
+  height: 35px;
+  margin: -10px -10px 10px -10px;
+  background: rgba(111, 133, 255, 0.1);
+}
+#tagIcon span {
+  font-size: 14px;
+  line-height: 35px;
+  vertical-align: middle;
+  color: rgba(255, 171, 0, 1);
+  background-image: url(search.png);
+  background-repeat: no-repeat;
+  background-size: 20px 16px;
+  padding-left: 30px;
+  padding-bottom: 5px;
+  margin-left: 25px;
 }
 
+.ant-table-wrapper {
+  float: left;
+}
+.ant-table {
+  color: aliceblue;
+  font-weight: 100;
+  max-height: auto;
+}
+
+.ant-table-content {
+  margin: 10px;
+}
 .ant-carousel .slick-slide {
   text-align: center;
   height: 400px;
@@ -43,7 +99,7 @@
 }
 
 #rightPanel table {
-  border: 2px solid rgb(50, 100, 150);
+  /* border: 2px solid rgb(50, 100, 150); */
 }
 
 .ant-table-tbody tr:hover {
@@ -51,15 +107,16 @@
 }
 
 .ant-table-tbody tr:nth-child(odd) {
-  background: rgba(52, 108, 141, 0.6);
+  background: rgba(111, 133, 255, 0.1);
 }
 .ant-table-tbody tr:nth-child(even) {
-  background: rgba(48, 49, 128, 0.6);
+  background: rgba(111, 133, 255, 0.2);
 }
 
 .ant-tag {
+  font-size: 14px;
   color: aliceblue;
-  background: rgba(50, 100, 150, 0.2);
+  background: rgba(111, 133, 255, 0.1);
   margin: 5px;
   border: 0;
 }

@@ -10,7 +10,8 @@ export default class App extends Component {
     this.state = {
       pickDay: 7, //0-7
       pickArea: "All", //area code
-      pickComps: [] //picked company codes
+      pickComps: [], //picked company codes
+      pickLine: null
     };
     this.areas = {};
     this.areaHash = {};
@@ -40,13 +41,22 @@ export default class App extends Component {
     this.setState({ pickComps: comps });
   }
 
+  onPickLine(lineCode) {
+    this.setState({ pickLine: lineCode });
+  }
+
   render() {
     return (
       <div>
         <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} />
         <DayPicker onchange={v => this.onPickDay(v)} />
         <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
-        <APanel areaInfo={this.areaHash} onchange={v => this.onPickComp(v)} />
+        <APanel
+          areaInfo={this.areaHash}
+          pickInfo={this.state}
+          onchange={v => this.onPickComp(v)}
+          onpickline={v => this.onPickLine(v)}
+        />
       </div>
     );
   }

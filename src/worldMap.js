@@ -14,6 +14,7 @@ import lineTrail from "./particle/lineTrail";
 import Stats from "stats-js";
 import FragFactory from "./textRenderer/fragFactory.js";
 import ParticleLauncher from "./particle/ParticleLauncher.js";
+import anime from "animejs";
 
 const SET = global.Sets;
 export default class WorldMap extends Component {
@@ -88,7 +89,7 @@ export default class WorldMap extends Component {
       let particleLauncher = new ParticleLauncher(spriteTex, color, boat, this.scene);
       boat.add(particleLauncher);
 
-      let textFrag = this.textFactory.frag(boat, "line" + i, 44, "#f4f4f4");
+      let textFrag = this.textFactory.frag(boat, pos[i].lineC, 44, "#f4f4f4");
       boat.add(textFrag.obj);
 
       let sl = new seaLine(coords, SET.geoLineColor, boat, [particleLauncher, trail]);
@@ -119,6 +120,9 @@ export default class WorldMap extends Component {
       }
     };
     this.scene.children.forEach(handeler);
+    if (flag.pickLine) {
+      this.focuse(flag.pickLine);
+    }
   }
 
   init() {
@@ -148,6 +152,48 @@ export default class WorldMap extends Component {
     // this.canvas2.appendChild(this.textFactory.canvas);
   }
 
+  focuse(lineCode) {
+    console.log(lineCode);
+    let pos = this.props.sealine.find(v => lineCode === v.lineC);
+
+    let sealine = pos.sealine;
+    if (sealine) {
+      let boat = sealine.boat;
+      let target = { h: 400 };
+      this.ani = anime({
+        targets: target,
+        duration: 3000,
+        endDelay: 3000,
+        easing: "easeInQuad",
+        h: 100,
+        autoplay: true,
+        round: 1,
+        update: a => {
+          this.camera.position.z = target.h;
+          this.camera.lookAt(boat.position);
+        },
+        complete: a => {
+          this.ani = anime({
+            targets: target,
+            duration: 3000,
+            easing: "easeInQuad",
+            h: 400,
+            autoplay: true,
+            update: a => {
+              this.camera.position.z = target.h;
+              this.camera.lookAt(boat.position);
+            },
+            complete: a => {
+              let centerX = SET.center[0] * SET.widthScale,
+                centerY = SET.center[1] * SET.heightScale;
+              this.camera.lookAt(centerX, centerY, 0);
+            }
+          });
+        }
+      });
+    }
+  }
+
   update(t) {
     this.stats.begin();
 
@@ -166,7 +212,7 @@ export default class WorldMap extends Component {
   render() {
     return (
       <div className="App">
-        <div ref={ref => (this.container = ref)} style={{ width: "1920px", height: "990px" }} />
+        <div ref={ref => (this.container = ref)} style={{ width: "1920px", height: "1080px" }} />
         <div ref={ref => (this.canvas2 = ref)} />
       </div>
     );

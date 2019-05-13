@@ -11,12 +11,14 @@ export default class APanel extends Component {
     this.comps = {};
     let compsChecked = {};
     this.areaMap = {};
+    this.allrow = [];
     for (let key in this.data) {
       let rows = this.data[key];
       rows = rows.map((e, i) => {
-        return { ...e, key: i };
+        return { ...e, key: i + Math.random() };
       });
       this.areaMap[key] = rows;
+      this.allrow.push(...rows);
       rows.forEach(e => {
         if (!this.comps[e.compC]) {
           this.comps[e.compC] = e.compN;
@@ -43,6 +45,8 @@ export default class APanel extends Component {
   }
   //{points:[],lineC:"",lineN:"",compC:"",compN:"",areaC:"",areaN:""}
   render() {
+    let picked = this.props.pickInfo;
+    let key = picked.pickArea;
     let pages = [];
     let compTags = [];
     let columns = [
@@ -72,15 +76,30 @@ export default class APanel extends Component {
         key: "areaC"
       }
     ];
-    for (let key in this.data) {
-      pages.push(
-        <div key={key}>
-          <div id="areaTitle">{key}</div>
-          {/* <hr /> */}
-          <Table pagination={false} showHeader={false} size="small" dataSource={this.areaMap[key]} columns={columns} />
+
+    pages.push(
+      <div id="linePanel" key={key}>
+        <div id="areaTitle">
+          <span>{key}</span>
+          <br />
+          <span>-</span>
+          <br />
+          <span>{key === "All" ? "全部" : this.areaMap[key][0].areaN}</span>
         </div>
-      );
-    }
+        {/* <hr /> */}
+        <Table
+          onRowClick={r => {
+            this.props.onpickline(r.lineC);
+          }}
+          scroll={{ y: 240, x: 600 }}
+          pagination={false}
+          showHeader={false}
+          size="small"
+          dataSource={key === "All" ? this.allrow : this.areaMap[key]}
+          columns={columns}
+        />
+      </div>
+    );
     for (let k in this.comps) {
       compTags.push(
         <CheckableTag checked={this.state.compsCheck[k]} onChange={checked => this.onCheck(k, checked)} key={k}>{`${k} - ${
@@ -90,8 +109,14 @@ export default class APanel extends Component {
     }
     return (
       <div id="rightPanel">
-        <Carousel autoplay>{pages}</Carousel>
-        <div id="tagPanel">{compTags}</div>
+        {pages}
+        {/* <Carousel dotPosition="left">{pages}</Carousel> */}
+        <div id="tagPanel">
+          <div id="tagIcon">
+            <span>船公司</span>
+          </div>
+          {compTags}
+        </div>
       </div>
     );
   }

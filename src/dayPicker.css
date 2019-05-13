@@ -31,10 +31,10 @@
   height: 80px;
   border-radius: 40px;
   background: #77aaff;
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 #day_pick input:checked {
   background: #77aaff;
-  opacity: 0.9;
+  opacity: 1;
 }

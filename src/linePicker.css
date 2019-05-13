@@ -1,7 +1,7 @@
 #line_pick {
   position: fixed;
   left: 150px;
-  top: 800px;
+  top: 20px;
 }
 .line_picker {
   float: left;
