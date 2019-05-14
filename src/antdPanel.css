@@ -1,3 +1,8 @@
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 #rightPanel {
   height: 260px;
   border-radius: 5px;
@@ -112,7 +117,9 @@
 .ant-table-tbody tr:nth-child(even) {
   background: rgba(111, 133, 255, 0.2);
 }
-
+.ant-table-tbody tr td {
+  border: 0;
+}
 .ant-tag {
   font-size: 14px;
   color: aliceblue;

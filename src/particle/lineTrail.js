@@ -27,10 +27,11 @@ export default class lineTrail {
         opacity: global.Sets.trailOpacity
       });
       let line = new THREE.Line(geo, mat);
-      line.sealineInfo = this.parent.sealineInfo;
+      line["sealineInfo"] = this.parent.sealineInfo;
       this.curves[index] = { obj: line, points: [] };
     }
     this.curves[index].obj.geometry.setFromPoints(this.curves[this.index].points);
+    this.curves[index].obj.layers.mask = this.parent.layers.mask;
     this.scene.add(this.curves[index].obj);
     this.index = index;
   }

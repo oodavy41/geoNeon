@@ -122,6 +122,7 @@ export default class WorldMap extends Component {
     this.scene.children.forEach(handeler);
     if (flag.pickLine) {
       this.focuse(flag.pickLine);
+      flag.pickLine = "";
     }
   }
 
@@ -157,6 +158,9 @@ export default class WorldMap extends Component {
     let pos = this.props.sealine.find(v => lineCode === v.lineC);
 
     let sealine = pos.sealine;
+    if (this.ani) {
+      this.ani.pause();
+    }
     if (sealine) {
       let boat = sealine.boat;
       let target = { h: 400 };
@@ -187,6 +191,7 @@ export default class WorldMap extends Component {
               let centerX = SET.center[0] * SET.widthScale,
                 centerY = SET.center[1] * SET.heightScale;
               this.camera.lookAt(centerX, centerY, 0);
+              this.ani = null;
             }
           });
         }
