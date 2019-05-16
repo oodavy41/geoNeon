@@ -1,8 +1,3 @@
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
 #rightPanel {
   height: 260px;
   border-radius: 5px;
@@ -57,18 +52,20 @@
   margin: 10px;
   padding: 10px;
 }
+
 #tagIcon {
   width: 400px;
   height: 35px;
   margin: -10px -10px 10px -10px;
   background: rgba(111, 133, 255, 0.1);
 }
+
 #tagIcon span {
   font-size: 14px;
   line-height: 35px;
   vertical-align: middle;
   color: rgba(255, 171, 0, 1);
-  background-image: url(search.png);
+  background-image: url(./search.png);
   background-repeat: no-repeat;
   background-size: 20px 16px;
   padding-left: 30px;
@@ -76,30 +73,30 @@
   margin-left: 25px;
 }
 
-.ant-table-wrapper {
+#rightPanel .ant-table-wrapper {
   float: left;
 }
-.ant-table {
+#rightPanel .ant-table {
   color: aliceblue;
   font-weight: 100;
   max-height: auto;
 }
 
-.ant-table-content {
+#rightPanel .ant-table-content {
   margin: 10px;
 }
-.ant-carousel .slick-slide {
+#rightPanel .ant-carousel .slick-slide {
   text-align: center;
   height: 400px;
   overflow: hidden;
 }
 
-.ant-carousel .slick-slide div {
+#rightPanel .ant-carousel .slick-slide div {
   font-size: 14px;
   color: #fff;
 }
 
-.ant-table-small {
+#rightPanel .ant-table-small {
   border: 0;
 }
 
@@ -107,20 +104,20 @@
   /* border: 2px solid rgb(50, 100, 150); */
 }
 
-.ant-table-tbody tr:hover {
+#rightPanel .ant-table-tbody tr:hover {
   color: rgb(50, 100, 150);
 }
 
-.ant-table-tbody tr:nth-child(odd) {
+#rightPanel .ant-table-tbody tr:nth-child(odd) {
   background: rgba(111, 133, 255, 0.1);
 }
-.ant-table-tbody tr:nth-child(even) {
+#rightPanel .ant-table-tbody tr:nth-child(even) {
   background: rgba(111, 133, 255, 0.2);
 }
-.ant-table-tbody tr td {
+#rightPanel .ant-table-tbody tr td {
   border: 0;
 }
-.ant-tag {
+#rightPanel .ant-tag {
   font-size: 14px;
   color: aliceblue;
   background: rgba(111, 133, 255, 0.1);

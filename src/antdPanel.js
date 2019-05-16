@@ -1,7 +1,7 @@
 import { Table, Carousel, Tag } from "antd";
 import React, { Component } from "react";
 import "antd/dist/antd.css";
-import "./antdPanel.css";
+import "./sources/antdPanel.css";
 
 const { CheckableTag } = Tag;
 export default class APanel extends Component {

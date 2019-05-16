@@ -3,7 +3,7 @@ import * as THREE from "three";
 import mapVec from "./geoJsons/countries.json";
 import rivers from "./geoJsons/rivers.json";
 import lakes from "./geoJsons/lakes.json";
-import "./App.css";
+import "./sources/App.css";
 import drawThreeGeo from "./tools/threeGeoJson";
 import "./settings";
 import millerXY from "./tools/millerTransformer";
@@ -15,6 +15,10 @@ import Stats from "stats-js";
 import FragFactory from "./textRenderer/fragFactory.js";
 import ParticleLauncher from "./particle/ParticleLauncher.js";
 import anime from "animejs";
+
+import earthNightMap from "./sources/earthNightMap11.png";
+import earthNormalMap from "./sources/earthNormalMap.png";
+import steamIcon from "./sources/steam.png";
 
 const SET = global.Sets;
 export default class WorldMap extends Component {
@@ -59,15 +63,15 @@ export default class WorldMap extends Component {
     let world = drawThreeGeo(mapVec, 1, "plane", ["ATA", "GRL"]);
     // drawThreeGeo(rivers, 1, "plane", { color: SET.waterColor }, this.scene);
     // drawThreeGeo(lakes, 1, "plane", { color: SET.waterColor }, this.scene);
-    let worldTex = new THREE.TextureLoader().load("earthNightMap11.png");
+    let worldTex = new THREE.TextureLoader().load(earthNightMap);
     worldTex.minFilter = THREE.LinearMipMapLinearFilter;
-    let worldNormal = new THREE.TextureLoader().load("earthNormalMap.png");
+    let worldNormal = new THREE.TextureLoader().load(earthNormalMap);
     worldNormal.magFilter = THREE.NearestMipMapLinearFilter;
     let worldOBJ = new earthLand(world, SET.geoLineColor, worldTex, worldNormal);
     this.scene.add(worldOBJ.getObj());
 
     let pos = this.props.sealine;
-    let spriteTex = new THREE.TextureLoader().load("steam.png");
+    let spriteTex = new THREE.TextureLoader().load(steamIcon);
 
     for (let i = 0; i < pos.length; i++) {
       let coords = pos[i].points.map(e => {

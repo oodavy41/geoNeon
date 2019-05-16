@@ -3,7 +3,7 @@
   left: 50px;
   top: 80px;
 }
-.picker {
+#day_pick .picker {
   margin: 15px;
   width: 80px;
   height: 80px;

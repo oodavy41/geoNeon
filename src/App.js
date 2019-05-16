@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WorldMap from "./worldMap";
 import DayPicker from "./dayPicker";
 import LinePicker from "./linePicker";
-import sealineData from "./data.json";
+import sealineData from "./sources/data.json";
 import APanel from "./antdPanel";
 export default class App extends Component {
   constructor(props) {

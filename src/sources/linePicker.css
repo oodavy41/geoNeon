@@ -3,7 +3,7 @@
   left: 150px;
   top: 20px;
 }
-.line_picker {
+#line_pick .line_picker {
   float: left;
   margin: 15px;
   width: 100px;
