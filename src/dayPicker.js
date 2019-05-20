@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./sources/dayPicker.css";
+import style from "./sources/dayPicker.css";
 export default class DayPicker extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,7 @@ export default class DayPicker extends Component {
 
   render() {
     return (
-      <div id="day_pick">
+      <div className={style.day_pick}>
         {this.days.map((e, i) => (
           <div className="picker" key={i}>
             <input

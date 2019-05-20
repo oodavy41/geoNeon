@@ -4,6 +4,9 @@ import DayPicker from "./dayPicker";
 import LinePicker from "./linePicker";
 import sealineData from "./sources/data.json";
 import APanel from "./antdPanel";
+
+import "antd/dist/antd.css";
+
 export default class App extends Component {
   constructor(props) {
     super(props);

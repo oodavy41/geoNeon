@@ -3,7 +3,6 @@ import * as THREE from "three";
 import mapVec from "./geoJsons/countries.json";
 import rivers from "./geoJsons/rivers.json";
 import lakes from "./geoJsons/lakes.json";
-import "./sources/App.css";
 import drawThreeGeo from "./tools/threeGeoJson";
 import "./settings";
 import millerXY from "./tools/millerTransformer";
@@ -194,8 +193,23 @@ export default class WorldMap extends Component {
             complete: a => {
               let centerX = SET.center[0] * SET.widthScale,
                 centerY = SET.center[1] * SET.heightScale;
-              this.camera.lookAt(centerX, centerY, 0);
-              this.ani = null;
+              let { x, y, z } = boat.position;
+              let target = { x, y, z };
+              this.ani = anime({
+                targets: target,
+                duration: 2000,
+                easing: "linear",
+                x: centerX,
+                y: centerY,
+                z: 0,
+                autoplay: true,
+                update: a => {
+                  this.camera.lookAt(target.x, target.y, target.z);
+                },
+                complete: a => {
+                  this.ani = null;
+                }
+              });
             }
           });
         }

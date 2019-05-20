@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import "./sources/linePicker.css";
+import style from "./sources/linePicker.css";
+
 export default class LinePicker extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,7 @@ export default class LinePicker extends Component {
 
   render() {
     return (
-      <div id="line_pick">
+      <div className={style.line_pick}>
         {this.lines.map((e, i) => {
           return (
             <div className="line_picker" key={i}>

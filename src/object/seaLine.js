@@ -6,6 +6,7 @@ const SET = global.Sets;
 export default class seaLine {
   constructor(points, color, boat, pls) {
     this.boat = boat;
+    this.id = Math.random();
     this.launcher = pls;
     this.curves = [];
     this.pointArray = [];
