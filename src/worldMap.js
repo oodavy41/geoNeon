@@ -3,6 +3,7 @@ import * as THREE from "three";
 import mapVec from "./geoJsons/countries.json";
 import rivers from "./geoJsons/rivers.json";
 import lakes from "./geoJsons/lakes.json";
+import cities from "./geoJsons/cities.json";
 import drawThreeGeo from "./tools/threeGeoJson";
 import "./settings";
 import millerXY from "./tools/millerTransformer";
@@ -18,6 +19,7 @@ import anime from "animejs";
 import earthNightMap from "./sources/earthNightMap11.png";
 import earthNormalMap from "./sources/earthNormalMap.png";
 import steamIcon from "./sources/steam.png";
+import beatPoint from "./object/beatPoint.js";
 
 const SET = global.Sets;
 export default class WorldMap extends Component {
@@ -32,6 +34,7 @@ export default class WorldMap extends Component {
     this.camera = null;
     this.animationID = 0;
     this.objs = [];
+    this.land = null;
   }
 
   componentDidMount() {
@@ -66,9 +69,10 @@ export default class WorldMap extends Component {
     worldTex.minFilter = THREE.LinearMipMapLinearFilter;
     let worldNormal = new THREE.TextureLoader().load(earthNormalMap);
     worldNormal.magFilter = THREE.NearestMipMapLinearFilter;
-    let worldOBJ = new earthLand(world, SET.geoLineColor, worldTex, worldNormal);
-    this.scene.add(worldOBJ.getObj());
+    this.land = new earthLand(world, SET.geoLineColor, worldTex, worldNormal);
+    this.scene.add(this.land.getObj());
 
+    //sealine generator
     let pos = this.props.sealine;
     let spriteTex = new THREE.TextureLoader().load(steamIcon);
 
@@ -99,11 +103,31 @@ export default class WorldMap extends Component {
       sl.show(this.scene);
       pos[i]["sealine"] = sl;
     }
+
+    // cities points generator
+    for (let i = 0; i < cities.length; i++) {
+      if (Math.random() > 0.15) {
+        continue;
+      }
+      let city = cities[i];
+      let cood = millerXY(city.lng, city.lat);
+      let citypos = new THREE.Vector3(cood[0], cood[1], 1);
+      let color = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      let cityPoint = new beatPoint(2, color, citypos);
+      let board = this.textFactory.frag(cityPoint, city.name, 44, color);
+      cityPoint.add(board.obj);
+      board.obj.position.z = 3;
+      board.obj.layers = cityPoint.layers;
+      this.scene.add(cityPoint);
+    }
     this.renderer.render(this.scene, this.camera);
     this.update(0);
   }
-
   componentDidUpdate() {
+    this.lineFilter();
+  }
+
+  lineFilter() {
     let flag = this.props.pickState;
     let handeler = e => {
       if (e.children || e.children.length > 0) {
@@ -166,54 +190,74 @@ export default class WorldMap extends Component {
     }
     if (sealine) {
       let boat = sealine.boat;
-      let target = { h: 400 };
+      let { x, y, z } = this.camera.position;
+      let target = { x, y, z };
       this.ani = anime({
         targets: target,
         duration: 3000,
-        endDelay: 3000,
+        endDelay: 10000,
         easing: "easeInQuad",
-        h: 100,
+        x: boat.position.x,
+        y: boat.position.y - 80,
+        z: 80,
         autoplay: true,
         round: 1,
         update: a => {
-          this.camera.position.z = target.h;
+          this.camera.position.set(target.x, target.y, target.z);
           this.camera.lookAt(boat.position);
+
+          this.land.meshMat.opacity = (100 - 5 * a.progress) / 100;
+          this.land.lineMat.opacity = Math.max(30, 5 * a.progress) / 100;
         },
-        complete: a => {
+        changeComplete: a => {
+          this.camera.layers.enable(3);
+        }
+      });
+      this.ani.finished
+        .then(() => {
           this.ani = anime({
             targets: target,
             duration: 3000,
             easing: "easeInQuad",
-            h: 400,
+            x: x,
+            y: y,
+            z: z,
             autoplay: true,
             update: a => {
-              this.camera.position.z = target.h;
+              this.camera.position.set(target.x, target.y, target.z);
               this.camera.lookAt(boat.position);
+
+              this.land.meshMat.opacity = a.progress / 100;
+              this.land.lineMat.opacity = Math.max(30, 100 - a.progress) / 100;
             },
             complete: a => {
-              let centerX = SET.center[0] * SET.widthScale,
-                centerY = SET.center[1] * SET.heightScale;
-              let { x, y, z } = boat.position;
-              let target = { x, y, z };
-              this.ani = anime({
-                targets: target,
-                duration: 2000,
-                easing: "linear",
-                x: centerX,
-                y: centerY,
-                z: 0,
-                autoplay: true,
-                update: a => {
-                  this.camera.lookAt(target.x, target.y, target.z);
-                },
-                complete: a => {
-                  this.ani = null;
-                }
-              });
+              this.camera.layers.disable(3);
             }
           });
-        }
-      });
+          return this.ani.finished;
+        })
+        .then(() => {
+          let centerX = SET.center[0] * SET.widthScale,
+            centerY = SET.center[1] * SET.heightScale;
+          let { x, y, z } = boat.position;
+          let target = { x, y, z };
+          this.ani = anime({
+            targets: target,
+            duration: 2000,
+            easing: "linear",
+            x: centerX,
+            y: centerY,
+            z: 0,
+            autoplay: true,
+            update: a => {
+              this.camera.lookAt(target.x, target.y, target.z);
+            }
+          });
+          return this.ani.finished;
+        })
+        .finally(() => {
+          this.ani = null;
+        });
     }
   }
 

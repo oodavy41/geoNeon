@@ -8,6 +8,16 @@ export default class earthLand extends tObj {
     this.lineColor = lineColor;
     this.landTex = landTex;
     this.normalTex = normalTex ? normalTex : null;
+    this.pointMat = new THREE.SpriteMaterial({ color: this.lineColor });
+    this.lineMat = new THREE.LineBasicMaterial({ color: this.lineColor, opacity: 0.3, transparent: true });
+    this.meshMat = new THREE.MeshPhongMaterial({
+      map: this.landTex,
+      normalMap: this.normalTex,
+      normalMapType: THREE.ObjectSpaceNormalMap,
+      shininess: 4,
+      transparent: true,
+      opacity: 1
+    });
 
     let funMap = { point: Point, line: Line, mesh: Mesh };
     landJson.forEach(e => {
@@ -22,7 +32,7 @@ function Point(e, that) {
   for (let ind = 0; ind < e.length; ind++) {
     geo.vertices.push(new THREE.Vector3(e[0].x, e[0].y, e[0].z));
   }
-  that.mesh.add(new THREE.ParticleSystem(geo, new THREE.SpriteMaterial({ color: that.lineColor })));
+  that.mesh.add(new THREE.ParticleSystem(geo, that.pointMat));
 }
 
 function Line(e, that) {
@@ -32,7 +42,7 @@ function Line(e, that) {
     geo.vertices.push(new THREE.Vector3(e[i].x, e[i].y, e[i].z));
   }
 
-  that.mesh.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: that.lineColor, opacity: 0.3, transparent: true })));
+  that.mesh.add(new THREE.Line(geo, that.lineMat));
 }
 
 function Mesh(e, that) {
@@ -40,11 +50,6 @@ function Mesh(e, that) {
   face_geom.setIndex(e.face);
   face_geom.addAttribute("position", new THREE.BufferAttribute(new Float32Array(e.position), 3));
   face_geom.addAttribute("uv", new THREE.BufferAttribute(new Float32Array(e.uv), 2));
-  let mat = new THREE.MeshPhongMaterial({
-    map: that.landTex,
-    normalMap: that.normalTex,
-    normalMapType: THREE.ObjectSpaceNormalMap,
-    shininess: 4
-  });
-  that.mesh.add(new THREE.Mesh(face_geom, mat));
+
+  that.mesh.add(new THREE.Mesh(face_geom, that.meshMat));
 }
