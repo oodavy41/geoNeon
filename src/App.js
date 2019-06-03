@@ -6,6 +6,7 @@ import sealineData from "./sources/data.json";
 import APanel from "./antdPanel";
 
 import "antd/dist/antd.css";
+import InfoPanel from "./infoPanel";
 
 export default class App extends Component {
   constructor(props) {
@@ -22,13 +23,12 @@ export default class App extends Component {
       if (!this.areas[e.areaC]) {
         this.areas[e.areaC] = Object.keys(this.areas).length + 1;
       }
-      let obj = e;
 
       if (!this.areaHash[e.areaC]) {
         this.areaHash[e.areaC] = [];
       }
       this.areaHash[e.areaC].push(e);
-      return obj;
+      return e;
     });
   }
 
@@ -45,21 +45,32 @@ export default class App extends Component {
   }
 
   onPickLine(lineCode) {
-    this.setState({ pickLine: lineCode });
+    let line = this.sealineData.find(v => lineCode === v.lineC);
+    this.setState({ pickLine: line });
+  }
+
+  offPickLine() {
+    this.setState({ pickLine: null });
   }
 
   render() {
     return (
       <div>
-        <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} />
-        <DayPicker onchange={v => this.onPickDay(v)} />
-        <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
-        <APanel
-          areaInfo={this.areaHash}
-          pickInfo={this.state}
-          onchange={v => this.onPickComp(v)}
-          onpickline={v => this.onPickLine(v)}
-        />
+        <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
+        {!this.state.pickLine ? (
+          <div>
+            <DayPicker onchange={v => this.onPickDay(v)} />
+            <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
+            <APanel
+              areaInfo={this.areaHash}
+              pickInfo={this.state}
+              onchange={v => this.onPickComp(v)}
+              onpickline={v => this.onPickLine(v)}
+            />
+          </div>
+        ) : (
+          <InfoPanel lineInfo={this.state.pickLine} />
+        )}
       </div>
     );
   }

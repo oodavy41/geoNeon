@@ -16,6 +16,7 @@ export default class lineTrail {
     this.curves[this.index].points.push(now);
     this.curves[this.index].obj.geometry.setFromPoints(this.curves[this.index].points);
     this.curves[this.index].obj.geometry.verticesNeedUpdate = true;
+    this.curves[this.index].obj.geometry.computeBoundingSphere();
   }
 
   switch(index) {

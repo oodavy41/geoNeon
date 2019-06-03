@@ -28,8 +28,8 @@ export default class particle {
       easing: "easeOutSine",
       duration: opt.life,
       update: a => {
-        let _ = t.start / 100;
-        this.sprite.scale.set(_, _, _);
+        let _t = t.start / 100;
+        this.sprite.scale.set(_t, _t, _t);
       },
       complete: a => {
         this.alive = false;

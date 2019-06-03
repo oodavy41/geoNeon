@@ -84,8 +84,8 @@ export default class WorldMap extends Component {
       let color = SET.boatColors[parseInt(Math.random() * SET.boatColors.length)];
       let boat = new THREE.Sprite(new THREE.SpriteMaterial({ map: spriteTex, color: color, transparent: true }));
 
-      let { areaC, compC, day } = pos[i];
-      boat["sealineInfo"] = { areaC, compC, day };
+      let { areaC, compC, lineC, day } = pos[i];
+      boat["sealineInfo"] = { areaC, compC, lineC, day };
 
       boat.scale.set(SET.boatSize, SET.boatSize, SET.boatSize);
 
@@ -123,12 +123,16 @@ export default class WorldMap extends Component {
     this.renderer.render(this.scene, this.camera);
     this.update(0);
   }
+
   componentDidUpdate() {
-    this.lineFilter();
+    let flag = this.props.pickState;
+    this.lineFilter(flag);
+    if (flag.pickLine) {
+      this.focuse(flag.pickLine);
+    }
   }
 
-  lineFilter() {
-    let flag = this.props.pickState;
+  lineFilter(flag) {
     let handeler = e => {
       if (e.children || e.children.length > 0) {
         e.children.forEach(handeler);
@@ -139,18 +143,17 @@ export default class WorldMap extends Component {
 
       e.layers.set(1);
       if (
-        (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
-        (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-        (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+        flag.pickLine
+          ? flag.pickLine.lineC === eflag.lineC
+          : (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
+            (eflag.day === flag.pickDay || flag.pickDay === 7) &&
+            (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
       ) {
         e.layers.set(0);
       }
+      console.info(flag, eflag);
     };
     this.scene.children.forEach(handeler);
-    if (flag.pickLine) {
-      this.focuse(flag.pickLine);
-      flag.pickLine = "";
-    }
   }
 
   init() {
@@ -180,15 +183,14 @@ export default class WorldMap extends Component {
     // this.canvas2.appendChild(this.textFactory.canvas);
   }
 
-  focuse(lineCode) {
-    console.log(lineCode);
-    let pos = this.props.sealine.find(v => lineCode === v.lineC);
-
-    let sealine = pos.sealine;
+  focuse(line) {
+    let sealine = line.sealine;
     if (this.ani) {
       this.ani.pause();
     }
     if (sealine) {
+      let centerX = SET.center[0] * SET.widthScale,
+        centerY = SET.center[1] * SET.heightScale;
       let boat = sealine.boat;
       let { x, y, z } = this.camera.position;
       let target = { x, y, z };
@@ -198,13 +200,14 @@ export default class WorldMap extends Component {
         endDelay: 10000,
         easing: "easeInQuad",
         x: boat.position.x,
-        y: boat.position.y - 80,
-        z: 80,
+        y: boat.position.y - 120,
+        z: 60,
         autoplay: true,
         round: 1,
         update: a => {
           this.camera.position.set(target.x, target.y, target.z);
           this.camera.lookAt(boat.position);
+          this.camera.rotation.z = 0;
 
           this.land.meshMat.opacity = (100 - 5 * a.progress) / 100;
           this.land.lineMat.opacity = Math.max(30, 5 * a.progress) / 100;
@@ -219,13 +222,14 @@ export default class WorldMap extends Component {
             targets: target,
             duration: 3000,
             easing: "easeInQuad",
-            x: x,
-            y: y,
-            z: z,
+            x: centerX,
+            y: centerY,
+            z: 400,
             autoplay: true,
             update: a => {
               this.camera.position.set(target.x, target.y, target.z);
               this.camera.lookAt(boat.position);
+              this.camera.rotation.z = 0;
 
               this.land.meshMat.opacity = a.progress / 100;
               this.land.lineMat.opacity = Math.max(30, 100 - a.progress) / 100;
@@ -237,13 +241,11 @@ export default class WorldMap extends Component {
           return this.ani.finished;
         })
         .then(() => {
-          let centerX = SET.center[0] * SET.widthScale,
-            centerY = SET.center[1] * SET.heightScale;
           let { x, y, z } = boat.position;
           let target = { x, y, z };
           this.ani = anime({
             targets: target,
-            duration: 2000,
+            duration: 1000,
             easing: "linear",
             x: centerX,
             y: centerY,
@@ -257,6 +259,7 @@ export default class WorldMap extends Component {
         })
         .finally(() => {
           this.ani = null;
+          this.props.offPick();
         });
     }
   }

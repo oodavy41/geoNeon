@@ -64,13 +64,11 @@ export default class seaLine {
 
   play(index) {
     let i = index % this.curveArray.length;
-    if (i === 0) {
-      if (this.launcher) {
-        this.launcher.forEach(e => {
-          e.complete && e.complete();
-          e.switch && e.switch(0);
-        });
-      }
+    if (this.launcher) {
+      this.launcher.forEach(e => {
+        i === 0 && e.complete && e.complete();
+        e.switch && e.switch(i);
+      });
     }
     let bzPoints = this.curveArray[i];
     this.boat.position.copy(bzPoints[0]);
@@ -95,15 +93,12 @@ export default class seaLine {
       easing: "linear",
       direction: "alternate",
       update: a => {
-        this.boat.position.set(target.x, target.y, target.z + 0.5);
+        this.boat.position.set(target.x, target.y, target.z + 0.1);
         this.launcher.forEach(e => {
           e.update && e.update();
         });
       },
       complete: a => {
-        this.launcher.forEach(e => {
-          e.switch && e.switch(i + 1);
-        });
         this.anime = this.play(i + 1);
       }
     });

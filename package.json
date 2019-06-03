@@ -6,6 +6,7 @@
     "animejs": "^3.0.1",
     "antd": "^3.16.6",
     "cdt2d": "^1.0.0",
+    "echarts": "^4.2.1",
     "poly2tri": "^1.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -15,8 +16,8 @@
     "typescript": "^3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "roadhog dev",
+    "build": "roadhog build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
