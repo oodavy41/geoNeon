@@ -98,7 +98,7 @@ export default class WorldMap extends Component {
 
       let textFrag = this.textFactory.frag(boat, pos[i].lineC, 44, "#f4f4f4");
       boat.add(textFrag.obj);
-
+      console.log(pos[i]);
       let sl = new seaLine(coords, SET.geoLineColor, boat, [particleLauncher, trail]);
       sl.show(this.scene);
       pos[i]["sealine"] = sl;
@@ -146,8 +146,8 @@ export default class WorldMap extends Component {
         flag.pickLine
           ? flag.pickLine.lineC === eflag.lineC
           : (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
-            (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-            (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+          (eflag.day === flag.pickDay || flag.pickDay === 7) &&
+          (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
       ) {
         e.layers.set(0);
       }
@@ -158,7 +158,7 @@ export default class WorldMap extends Component {
 
   init() {
     this.stats = new Stats();
-    this.container.appendChild(this.stats.dom);
+    // this.container.appendChild(this.stats.dom);
 
     this.cvWidth = this.container.clientWidth;
     this.cvHeight = this.container.clientHeight;

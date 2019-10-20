@@ -28,10 +28,9 @@ export default class seaLine {
       for (let i = 0; i < splitpos.length; i++) {
         points.push(proPoints.slice(splitpos[i] + 1, splitpos[i + 1]));
         let v = points[i][points[i].length - 1];
-        let mapWidth = SET.earthS * SET.widthScale;
-        let left = v.x < mapWidth / 2;
-        points[i].push(new THREE.Vector3(left ? 0 : mapWidth, v.y, v.z));
-        points[i + 1].unshift(new THREE.Vector3(left ? mapWidth : 0, v.y, v.z));
+        let left = v.x < SET.center[0];
+        points[i].push(new THREE.Vector3(left ? SET.center[0] - SET.earthS / 2 : SET.center[0] + SET.earthS / 2, v.y, v.z));
+        points[i + 1].unshift(new THREE.Vector3(left ? SET.center[0] + SET.earthS / 2 : SET.center[0] - SET.earthS / 2, v.y, v.z));
       }
     } else {
       points = [points];

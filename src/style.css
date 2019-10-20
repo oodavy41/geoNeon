@@ -1,0 +1,15 @@
+.title{
+    position: absolute;
+    left:100px;
+    top:10px;
+    color:#fff;
+    font-size: 50px;
+}
+
+.shanghaiTag{
+    position: absolute;
+    top: 411px;
+    left: 801px;
+    font-size: 10px;
+    color:rgb(9, 240, 170)
+}

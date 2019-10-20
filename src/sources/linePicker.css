@@ -1,27 +1,29 @@
 .line_pick {
   position: fixed;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: nowrap;
-  width: 1300px;
-  left: 150px;
-  top: 20px;
+  width: 1000px;
+  left: 550px;
+  top: 10px;
 }
 .line_pick .line_picker {
-  margin: 15px;
-  width: 100px;
+  float: left;
+  margin: 5px;
+  width: 120px;
   height: 40px;
 }
 .line_pick span {
   pointer-events: none;
   z-index: 99;
-  width: 100px;
-  height: 40px;
+  width: 120px;
+  height: 20px;
   text-align: center;
-  line-height: 40px;
+  line-height: 20px;
   color: aliceblue;
   position: absolute;
-  margin-left: -100px;
+  margin-left: -120px;
+}
+
+.line_pick .line_name{
+  margin-top: 20px;
 }
 
 .line_pick input:hover {
@@ -31,9 +33,9 @@
 .line_pick input {
   z-index: -99;
   appearance: none;
-  width: 100px;
+  width: 120px;
   height: 40px;
-  border-radius: 5px;
+  border-radius: 2px;
   background: #e05c72;
   opacity: 0.5;
 }

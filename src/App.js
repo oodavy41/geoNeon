@@ -5,9 +5,9 @@ import LinePicker from "./linePicker";
 import sealineData from "./sources/data.json";
 import APanel from "./antdPanel";
 
-import "antd/dist/antd.css";
 import InfoPanel from "./infoPanel";
 
+import style from "./style.css"
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ export default class App extends Component {
     this.areaHash = {};
     this.sealineData = sealineData.map(e => {
       if (!this.areas[e.areaC]) {
-        this.areas[e.areaC] = Object.keys(this.areas).length + 1;
+        this.areas[e.areaC] = e.areaN;
       }
 
       if (!this.areaHash[e.areaC]) {
@@ -56,21 +56,23 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
+        <div className={style.title}>上海港全球航线</div>
+        <div className={style.shanghaiTag}>上海 ●</div>
+        <WorldMap sealine={this.sealineData} pickState={this.state} offPick={() => this.offPickLine()} />
         {!this.state.pickLine ? (
           <div>
-            <DayPicker onchange={v => this.onPickDay(v)} />
-            <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
-            <APanel
+            {/* <DayPicker onchange={v => this.onPickDay(v)} /> */}
+            <LinePicker areaInfo={this.areaHash} areas={this.areas} onchange={v => this.onPickArea(v)} />
+            {/* <APanel
               areaInfo={this.areaHash}
               pickInfo={this.state}
               onchange={v => this.onPickComp(v)}
               onpickline={v => this.onPickLine(v)}
-            />
+            /> */}
           </div>
         ) : (
-          <InfoPanel lineInfo={this.state.pickLine} />
-        )}
+            {/* <InfoPanel lineInfo={this.state.pickLine} />*/ }
+          )}
       </div>
     );
   }

@@ -1,7 +1,8 @@
 let earthS = 400.953427900472;
 global.Sets = {
   earthS: earthS,
-  center: [earthS / 2, earthS / 4],
+  center: [(earthS * 11) / 12, earthS / 4],
+  Xoffset: -30,
 
   heightScale: 1.3,
   widthScale: 1,
