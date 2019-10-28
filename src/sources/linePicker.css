@@ -41,7 +41,7 @@
 .line_count{
   float: right;
   text-align: end;
-  font-weight: 800;
+  font-weight: 400;
 }
 .line_carry{
   float: left;

@@ -38,16 +38,16 @@ export default class LinePicker extends Component {
   }
 
   numFormat(num) {
-    let str = '';
+    let str = "";
     while (num > 1000) {
       let s = num % 1000;
-      s = parseInt(s)
+      s = parseInt(s);
       num /= 1000;
-      num = parseInt(num)
-      str = str ? s + ',' + str : s
+      num = parseInt(num);
+      str = str ? s + "," + str : s;
     }
-    str = num + ',' + str;
-    return str
+    str = num + "," + str;
+    return str;
   }
 
   render() {
@@ -55,16 +55,18 @@ export default class LinePicker extends Component {
       <div className={style.line_pick}>
         {this.lines.map((e, i) => {
           return (
-            <div className={`${style.line_picker}`} key={i} onClick={() => this.change(e.C)}
+            <div
+              className={`${style.line_picker}`}
+              key={i}
+              onClick={() => this.change(e.C)}
               key={i}
               value={e}
               style={{ background: e.color }}
-              checked={this.init ? i == this.lines.length - 1 : null}>
-
+              checked={this.init ? i == this.lines.length - 1 : null}
+            >
               <div className={style.line_name}>{`${e.N}`}</div>
               <div className={style.line_count}>{`${e.C}`}</div>
-              <div className={style.line_carry}>{`${this.numFormat(e.L)}`}</div>
-
+              {/* <div className={style.line_carry}>{`${this.numFormat(e.L)}`}</div> */}
             </div>
           );
         })}
