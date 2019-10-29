@@ -66,7 +66,7 @@ export default class LinePicker extends Component {
             >
               <div className={style.line_name}>{`${e.N}`}</div>
               <div className={style.line_count}>{`${e.C}`}</div>
-              {/* <div className={style.line_carry}>{`${this.numFormat(e.L)}`}</div> */}
+              <div className={style.line_carry}>{`${this.numFormat(e.L)}`}</div>
             </div>
           );
         })}

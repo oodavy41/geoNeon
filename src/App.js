@@ -84,7 +84,7 @@ export default class App extends Component {
       <div>
         <div className={style.title}>上海港全球航线</div>
         <div className={style.subtitle}>航线总数：854</div>
-        {/* <div className={style.subsubtitle}>2018总箱量(TEU):42,010,000</div> */}
+        <div className={style.subsubtitle}>2018总箱量(TEU):42,010,000</div>
         <div className={style.shanghaiTag}>上海 ●</div>
         <WorldMap sealine={this.sealineData} pickState={this.state} offPick={() => this.offPickLine()} />
         {!this.state.pickLine ? (
