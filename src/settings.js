@@ -1,8 +1,7 @@
 let earthS = 400.953427900472;
 global.Sets = {
   earthS: earthS,
-  center: [(earthS * 11) / 12, earthS * 0.32],
-  Xoffset: -30,
+  center: [earthS / 2, earthS / 4],
 
   heightScale: 1.3,
   widthScale: 1,
@@ -25,5 +24,19 @@ global.Sets = {
   backgroundColor: 0x12122c,
   sunLightColor: 0xfff4f4,
 
-  boatColors: [0xa2593d, 0xc6302e, 0xff8f2e, 0xff9859, 0xf6ff71, 0xff6368, 0xff47a9, 0xff9c4c, 0x3f72a8, 0x3cd8be]
+  boatColors: [
+    "#4d3080",
+    "#062e6b",
+    "#4e7191",
+    "#2e681e",
+    "#446014",
+    "#857c2f",
+    "#703c15",
+    "#33458d",
+    "#852e39",
+    "#864972",
+    "#835d1c",
+    "#053d4c",
+    "#847c30"
+  ]
 };

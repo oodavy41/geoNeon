@@ -46,11 +46,7 @@
 <script src="https://webapi.amap.com/maps?v=1.4.14&key=67b4b19e0b19792352244afd39397457&plugin=AMap.Autocomplete"></script>
 <script type="text/javascript">
   var map = new AMap.Map("container", {
-      resizeEnable: true,
-      mapStyle:"amap://styles/befcc40b31999809db969671abd2749a",
-      features:['road','bg'],
-      viewMode:"3D",
-      zoom:3
+      resizeEnable: true
   });
   var search = document.getElementById("search");
   
@@ -98,7 +94,7 @@
     });
     map.add(marker);
     coords.push({coord:[lng,lat],marker:marker})
-    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[1]},${e.coord[0]}]`}).join(",");
+    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[1]},${e.coord[0]},]`}).join(",");
   }
 
   var auto = new AMap.Autocomplete({

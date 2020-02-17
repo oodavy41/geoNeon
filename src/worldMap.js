@@ -98,7 +98,7 @@ export default class WorldMap extends Component {
 
       let textFrag = this.textFactory.frag(boat, pos[i].lineC, 44, "#f4f4f4");
       boat.add(textFrag.obj);
-      console.log(pos[i]);
+
       let sl = new seaLine(coords, SET.geoLineColor, boat, [particleLauncher, trail]);
       sl.show(this.scene);
       pos[i]["sealine"] = sl;
@@ -113,7 +113,7 @@ export default class WorldMap extends Component {
       let cood = millerXY(city.lng, city.lat);
       let citypos = new THREE.Vector3(cood[0], cood[1], 1);
       let color = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-      let cityPoint = new beatPoint(2, color, citypos);
+      let cityPoint = new beatPoint(0.7, color, citypos);
       let board = this.textFactory.frag(cityPoint, city.name, 44, color);
       cityPoint.add(board.obj);
       board.obj.position.z = 3;
@@ -146,8 +146,8 @@ export default class WorldMap extends Component {
         flag.pickLine
           ? flag.pickLine.lineC === eflag.lineC
           : (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
-          (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-          (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+            (eflag.day === flag.pickDay || flag.pickDay === 7) &&
+            (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
       ) {
         e.layers.set(0);
       }
@@ -157,7 +157,7 @@ export default class WorldMap extends Component {
   }
 
   init() {
-    this.stats = new Stats();
+    // this.stats = new Stats();
     // this.container.appendChild(this.stats.dom);
 
     this.cvWidth = this.container.clientWidth;
@@ -265,7 +265,7 @@ export default class WorldMap extends Component {
   }
 
   update(t) {
-    this.stats.begin();
+    // this.stats.begin();
 
     //=========      =========
     // this.renderer.clear();
@@ -275,7 +275,7 @@ export default class WorldMap extends Component {
     this.renderer.render(this.scene, this.camera);
 
     //=========      =========
-    this.stats.end();
+    // this.stats.end();
     this.animationID = requestAnimationFrame(t => this.update(t));
   }
 

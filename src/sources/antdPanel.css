@@ -16,6 +16,7 @@
 .rightPanel :global .ant-tag-checkable {
   padding: 1px 7px;
   background: rgba(111, 133, 255, 0.2);
+  border: 0;
 }
 
 .rightPanel :global .ant-tag-checkable-checked {
@@ -126,5 +127,4 @@
   color: aliceblue;
   background: rgba(111, 133, 255, 0.1);
   margin: 5px;
-  border: 0;
 }

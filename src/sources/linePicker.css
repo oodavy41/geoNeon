@@ -1,56 +1,41 @@
 .line_pick {
-  position: absolute;
-  width: 1500px;
-  left: 500px;
-  top: 50px;
+  position: fixed;
+  width: 1300px;
+  left: 450px;
+  top: 20px;
 }
 .line_pick .line_picker {
   float: left;
-  margin: 10px;
-  padding: 8px 11px;
-  width: 176px;
-  opacity: 1;
+  margin: 5px;
+  width: 100px;
+  height: 40px;
 }
-
-.line_pick .line_div {
-  z-index: -99;
-  width: 176px;
-  border-radius: 2px;
-  background: #e05c72;
-  opacity: 1;
-}
-
-.line_pick .line_div:hover {
-
-}
-.line_picker div {
+.line_pick span {
   pointer-events: none;
-  z-index: 999;
-  line-height: 33px;
-  font-size: 25px;
-  font-family: MicrosoftYaHei;
+  z-index: 99;
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
   color: aliceblue;
+  position: absolute;
+  margin-left: -100px;
 }
 
-.line_name{
-  float:left;
-  text-align: start;
-  width:100px;
-  font-weight: 200;
-}
-.line_count{
-  float: right;
-  text-align: end;
-  font-weight: 800;
-}
-.line_carry{
-  float: left;
-  width: 100%;
-  text-align: end;
-  font-weight: 400;
-
+.line_pick input:hover {
+  opacity: 0.7;
 }
 
-.line_pick .checked {
+.line_pick input {
+  z-index: -99;
+  appearance: none;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background: #e05c72;
+  opacity: 0.5;
+}
+
+.line_pick input:checked {
   opacity: 0.9;
 }

@@ -2,7 +2,6 @@
 // lat 纬度，南纬是负数
 import "../settings";
 export default function millerXY(lng, lat) {
-  if (lng < global.Sets.Xoffset) lng += 360;
   var L = global.Sets.earthS, // 地球周长
     W = global.Sets.widthScale * L, // 平面展开后，x轴等于周长
     H = (global.Sets.heightScale * L) / 2, // y轴约等于周长一半

@@ -1,36 +1,37 @@
-::-webkit-scrollbar { width: 0 ;height:0!important }
-
-
-.title{
-    position: absolute;
-    left:78px;
-    top:37px;
-    color: #C6C6C6;
-    font-size: 50px;
-    font-weight: 100;
+::-webkit-scrollbar {
+  width: 0;
+  height: 0 !important;
 }
 
-.shanghaiTag{
-    position: absolute;
-    top: 545px;
-    left: 801px;
-    font-size: 10px;
-    color:rgb(9, 240, 170)
+.title {
+  position: absolute;
+  left: 78px;
+  top: 20px;
+  color: #c6c6c6;
+  font-size: 50px;
+  font-weight: 100;
 }
 
-.subtitle{
-    position: absolute;
-    left:78px;
-    top:156px;
-    font-size: 40px;
-    color: #DDEAFF;
-    font-weight: 600;
+.shanghaiTag {
+  position: absolute;
+  top: 625px;
+  left: 775px;
+  font-size: 10px;
+  color: rgb(9, 240, 170);
 }
-.subsubtitle{
-    position: absolute;
-    left:77px;
-    top:216px;
-    font-size: 30px;
-    color: #DDEAFF;
 
+.subtitle {
+  position: absolute;
+  left: 78px;
+  top: 156px;
+  font-size: 40px;
+  color: #ddeaff;
+  font-weight: 600;
+}
+.subsubtitle {
+  position: absolute;
+  left: 77px;
+  top: 216px;
+  font-size: 30px;
+  color: #ddeaff;
 }
