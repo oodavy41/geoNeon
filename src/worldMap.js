@@ -167,7 +167,7 @@ export default class WorldMap extends Component {
     let centerX = SET.center[0] * SET.widthScale,
       centerY = SET.center[1] * SET.heightScale;
     this.camera = new THREE.PerspectiveCamera(40, this.cvWidth / this.cvHeight, 1, 10000);
-    this.camera.position.set(centerX, centerY, 400.0);
+    this.camera.position.set(centerX, centerY, 200.0);
     this.camera.lookAt(centerX, centerY, 0);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -282,7 +282,7 @@ export default class WorldMap extends Component {
   render() {
     return (
       <div className="App">
-        <div ref={ref => (this.container = ref)} style={{ width: "1920px", height: "1080px" }} />
+        <div ref={ref => (this.container = ref)} style={{ width: "1920px", height: "360px" }} />
         <div ref={ref => (this.canvas2 = ref)} />
       </div>
     );

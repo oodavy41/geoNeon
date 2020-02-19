@@ -58,22 +58,8 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <div className={style.title}>上海港全球航线</div>
         <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
-        {!this.state.pickLine ? (
-          <div>
-            <DayPicker onchange={v => this.onPickDay(v)} />
-            <LinePicker areaInfo={this.areaHash} onchange={v => this.onPickArea(v)} />
-            <APanel
-              areaInfo={this.areaHash}
-              pickInfo={this.state}
-              onchange={v => this.onPickComp(v)}
-              onpickline={v => this.onPickLine(v)}
-            />
-          </div>
-        ) : (
-          <InfoPanel lineInfo={this.state.pickLine} />
-        )}
+        
       </div>
     );
   }
