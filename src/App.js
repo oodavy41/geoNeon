@@ -32,6 +32,7 @@ export default class App extends Component {
       this.areaHash[e.areaC].push(e);
       return e;
     });
+    this.pickedSealine = sealineData;
   }
 
   onPickArea(area) {
@@ -52,13 +53,28 @@ export default class App extends Component {
   }
 
   offPickLine() {
-    this.setState({ pickLine: null });
+    this.setState({
+      pickLine: null,
+      pickDay: 7,
+      pickArea: "All"
+    });
   }
 
+  componentWillUpdate() {
+    const flag = this.state;
+    this.pickedSealine = this.sealineData.filter(eflag => {
+      return (
+        (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
+        (eflag.day === flag.pickDay || flag.pickDay === 7) &&
+        (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+      );
+    });
+    console.log(this.pickedSealine);
+  }
   render() {
     return (
-      <div>
-        <div className={style.title}>上海港全球航线</div>
+      <div style={{ width: "1920px", height: "1080px" }}>
+        {/* <div className={style.title}>上海港全球航线</div> */}
         <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
         {!this.state.pickLine ? (
           <div>
@@ -69,6 +85,7 @@ export default class App extends Component {
               pickInfo={this.state}
               onchange={v => this.onPickComp(v)}
               onpickline={v => this.onPickLine(v)}
+              pickedSealines={this.pickedSealine}
             />
           </div>
         ) : (

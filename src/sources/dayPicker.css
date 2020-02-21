@@ -1,23 +1,23 @@
 .day_pick {
   position: fixed;
-  left: 50px;
-  top: 150px;
+  left: 30px;
+  top: 160px;
 }
 .day_pick .picker {
   margin: 15px;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 .day_pick span {
   pointer-events: none;
   z-index: 99;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   text-align: center;
-  line-height: 80px;
+  line-height: 60px;
   color: aliceblue;
   position: absolute;
-  margin-left: -80px;
+  margin-left: -60px;
 }
 
 .day_pick input:hover {
@@ -27,9 +27,9 @@
 .day_pick input {
   z-index: -99;
   appearance: none;
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
   background: #77aaff;
   opacity: 0.2;
 }

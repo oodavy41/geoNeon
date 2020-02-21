@@ -11,32 +11,20 @@ export default class LinePicker extends Component {
     this.lines = Object.keys(this.props.areaInfo);
     this.lines.push("All");
     this.colors = [
-      "#4d3080",
-      "#062e6b",
-      "#4e7191",
-      "#2e681e",
-      "#446014",
-      "#857c2f",
-      "#703c15",
-      "#33458d",
-      "#852e39",
-      "#864972",
-      "#835d1c",
-      "#053d4c",
-      "#847c30",
-      "#4d3080",
-      "#062e6b",
-      "#4e7191",
-      "#2e681e",
-      "#446014",
-      "#857c2f",
-      "#703c15",
-      "#33458d",
-      "#852e39",
-      "#864972",
-      "#835d1c",
-      "#053d4c",
-      "#847c30"
+      "#ADCCFF",
+      "#FF4D4F",
+      "#D46B08",
+      "#7CB305",
+      "#52C41A",
+      "#597EF7",
+      "#FF85C0",
+      "#08979C",
+      "#9254DE",
+      "#91D5FF",
+      "#FFEC3D",
+      "#0050B3",
+      "#006D75",
+      "#FAAD14"
     ];
     console.log(this.lines);
   }

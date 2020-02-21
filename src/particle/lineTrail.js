@@ -8,6 +8,11 @@ export default class lineTrail {
     this.scene = scene;
     this.curves = [];
     this.index = 0;
+    this.mat = new THREE.LineBasicMaterial({
+      color: this.color,
+      transparent: true,
+      opacity: global.Sets.trailOpacity
+    });
   }
 
   update() {
@@ -22,11 +27,7 @@ export default class lineTrail {
   switch(index) {
     if (!this.curves[index]) {
       let geo = new THREE.BufferGeometry();
-      let mat = new THREE.LineBasicMaterial({
-        color: this.color,
-        transparent: true,
-        opacity: global.Sets.trailOpacity
-      });
+      let mat = this.mat;
       let line = new THREE.Line(geo, mat);
       line["sealineInfo"] = this.parent.sealineInfo;
       this.curves[index] = { obj: line, points: [] };
@@ -41,5 +42,9 @@ export default class lineTrail {
       this.scene.remove(e.obj);
       e.points = [];
     });
+  }
+
+  changeMatColor(color) {
+    this.mat.color = new THREE.Color(color);
   }
 }

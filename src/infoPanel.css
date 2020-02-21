@@ -1,10 +1,42 @@
 .infoPanel {
+  margin-top: 230px;
   padding: 60px 10px 10px 10px;
   position: fixed;
   right: 100px;
-  top: 300px;
-  background: rgba(55, 55, 95, 0.5);
+  top: 48px;
+  background: rgba(24, 31, 67, 0.94);
   color: aliceblue;
+}
+
+.info {
+  font-size: 17px;
+  line-height: 30px;
+  padding: 35px 150px;
+  line-height: 55px;
+  font-size: 24px;
+  position: absolute;
+  left: -250px;
+  top: -230px;
+  width: 915px;
+  height: 175px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: rgb(226, 250, 222);
+}
+.icon {
+  display: inline-block;
+  vertical-align: center;
+  width: 17px;
+  height: 12px;
+  margin-right: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.echarts {
+  width: 400px;
+  height: 160px;
 }
 
 .infoPanel :global .ant-progress {
@@ -44,21 +76,4 @@
   background: rgba(221, 69, 145, 0.384);
   margin: 5px;
   border: 1px solid rgb(229, 217, 185);
-}
-
-.info {
-  font-size: 17px;
-  line-height: 30px;
-  padding: 0 20px 0 30px;
-  position: absolute;
-  left: -50px;
-  top: -20px;
-  width: 450px;
-  color: rgb(226, 250, 222);
-  background-color: rgba(233, 70, 70, 0.6);
-}
-
-.echarts {
-  width: 400px;
-  height: 160px;
 }

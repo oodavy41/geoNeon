@@ -19,6 +19,7 @@ import anime from "animejs";
 import earthNightMap from "./sources/earthNightMap11.png";
 import earthNormalMap from "./sources/earthNormalMap.png";
 import steamIcon from "./sources/steam.png";
+import boatImg from "./sources/boat.png";
 import beatPoint from "./object/beatPoint.js";
 
 const SET = global.Sets;
@@ -35,12 +36,19 @@ export default class WorldMap extends Component {
     this.animationID = 0;
     this.objs = [];
     this.land = null;
+    this.boatBoard = null;
   }
 
   componentDidMount() {
     this.init();
 
     var boxsize = 999999;
+
+    let boatTex = new THREE.TextureLoader().load(boatImg);
+    this.boatBoard = new THREE.Sprite(new THREE.SpriteMaterial({ map: boatTex, transparent: true }));
+    this.boatBoard.scale.set(10, 7, 1);
+    this.boatBoard.layers.set(3);
+    this.scene.add(this.boatBoard);
 
     let light = new THREE.DirectionalLight(SET.sunLightColor);
     this.scene.add(light);
@@ -112,7 +120,7 @@ export default class WorldMap extends Component {
       let city = cities[i];
       let cood = millerXY(city.lng, city.lat);
       let citypos = new THREE.Vector3(cood[0], cood[1], 1);
-      let color = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      let color = "#FFAB00";
       let cityPoint = new beatPoint(0.7, color, citypos);
       let board = this.textFactory.frag(cityPoint, city.name, 44, color);
       cityPoint.add(board.obj);
@@ -122,8 +130,14 @@ export default class WorldMap extends Component {
     }
     this.renderer.render(this.scene, this.camera);
     this.update(0);
-  }
 
+    this.container.addEventListener("dblclick", e => {
+      this.back();
+    });
+  }
+  componentWillUnmount() {
+    this.container.removeEventListener("dblclick");
+  }
   componentDidUpdate() {
     let flag = this.props.pickState;
     this.lineFilter(flag);
@@ -141,7 +155,6 @@ export default class WorldMap extends Component {
 
       if (!eflag) return;
 
-      e.layers.set(1);
       if (
         flag.pickLine
           ? flag.pickLine.lineC === eflag.lineC
@@ -150,8 +163,9 @@ export default class WorldMap extends Component {
             (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
       ) {
         e.layers.set(0);
+      } else {
+        e.layers.set(1);
       }
-      console.info(flag, eflag);
     };
     this.scene.children.forEach(handeler);
   }
@@ -185,83 +199,65 @@ export default class WorldMap extends Component {
 
   focuse(line) {
     let sealine = line.sealine;
+    this.focuseLine = sealine;
+    let slpoints = sealine.curveArray[sealine.curveArray.length - 1];
+    let endPoint = slpoints[slpoints.length - 1];
+    this.boatBoard.position.copy(endPoint);
+    this.boatBoard.position.y += 2;
+    this.boatBoard.position.z = 3;
+
+    sealine.changeDashColor(0xff0000);
     if (this.ani) {
       this.ani.pause();
     }
     if (sealine) {
-      let centerX = SET.center[0] * SET.widthScale,
-        centerY = SET.center[1] * SET.heightScale;
       let boat = sealine.boat;
       let { x, y, z } = this.camera.position;
       let target = { x, y, z };
       this.ani = anime({
         targets: target,
-        duration: 3000,
-        endDelay: 10000,
+        duration: 1000,
+        // endDelay: 100000000,
         easing: "easeInQuad",
-        x: boat.position.x,
-        y: boat.position.y - 120,
-        z: 60,
+        x: endPoint.x - 70,
+        y: endPoint.y - 70,
+        z: 70,
         autoplay: true,
         round: 1,
         update: a => {
-          this.camera.position.set(target.x, target.y, target.z);
-          this.camera.lookAt(boat.position);
+          let boatPos = boat.position;
+          this.camera.position.copy(target);
+          this.camera.lookAt(endPoint);
           this.camera.rotation.z = 0;
-
           this.land.meshMat.opacity = (100 - 5 * a.progress) / 100;
           this.land.lineMat.opacity = Math.max(30, 5 * a.progress) / 100;
         },
         changeComplete: a => {
           this.camera.layers.enable(3);
+
+          this.camera.lookAt(endPoint);
+          this.camera.rotation.z = 0;
         }
       });
-      this.ani.finished
-        .then(() => {
-          this.ani = anime({
-            targets: target,
-            duration: 3000,
-            easing: "easeInQuad",
-            x: centerX,
-            y: centerY,
-            z: 400,
-            autoplay: true,
-            update: a => {
-              this.camera.position.set(target.x, target.y, target.z);
-              this.camera.lookAt(boat.position);
-              this.camera.rotation.z = 0;
-
-              this.land.meshMat.opacity = a.progress / 100;
-              this.land.lineMat.opacity = Math.max(30, 100 - a.progress) / 100;
-            },
-            complete: a => {
-              this.camera.layers.disable(3);
-            }
-          });
-          return this.ani.finished;
-        })
-        .then(() => {
-          let { x, y, z } = boat.position;
-          let target = { x, y, z };
-          this.ani = anime({
-            targets: target,
-            duration: 1000,
-            easing: "linear",
-            x: centerX,
-            y: centerY,
-            z: 0,
-            autoplay: true,
-            update: a => {
-              this.camera.lookAt(target.x, target.y, target.z);
-            }
-          });
-          return this.ani.finished;
-        })
-        .finally(() => {
-          this.ani = null;
-          this.props.offPick();
-        });
     }
+  }
+
+  back() {
+    let line = this.focuseLine;
+    line.recoveDashColor();
+
+    this.ani && this.ani.pause();
+    let centerX = SET.center[0] * SET.widthScale,
+      centerY = SET.center[1] * SET.heightScale;
+    this.camera.layers.disable(3);
+    this.camera.position.set(centerX, centerY, 400);
+    this.camera.rotation.z = 0;
+    this.camera.lookAt(centerX, centerY, 0);
+    this.land.meshMat.opacity = 1;
+    this.land.lineMat.opacity = 0.3;
+    this.ani = null;
+    this.props.offPick();
+    this.focuseLine = null;
   }
 
   update(t) {

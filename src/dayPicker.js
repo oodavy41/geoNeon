@@ -16,7 +16,7 @@ export default class DayPicker extends Component {
     return (
       <div className={style.day_pick}>
         {this.days.map((e, i) => (
-          <div className="picker" key={i}>
+          <div className={style.picker} key={i}>
             <input
               type="radio"
               name="day"

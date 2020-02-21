@@ -95,16 +95,19 @@ export default class APanel extends Component {
           pagination={false}
           showHeader={false}
           size="small"
-          dataSource={key === "All" ? this.allrow : this.areaMap[key]}
+          // dataSource={key === "All" ? this.allrow : this.areaMap[key]}
+          dataSource={this.props.pickedSealines}
           columns={columns}
         />
       </div>
     );
     for (let k in this.comps) {
       compTags.push(
-        <CheckableTag checked={this.state.compsCheck[k]} onChange={checked => this.onCheck(k, checked)} key={k}>{`${k} - ${
-          this.comps[k]
-        }`}</CheckableTag>
+        <CheckableTag
+          checked={this.state.compsCheck[k]}
+          onChange={checked => this.onCheck(k, checked)}
+          key={k}
+        >{`${k} - ${this.comps[k]}`}</CheckableTag>
       );
     }
     return (

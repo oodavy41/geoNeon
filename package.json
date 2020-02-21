@@ -16,7 +16,7 @@
     "typescript": "^3.4.3"
   },
   "scripts": {
-    "start": "roadhog dev",
+    "start": "roadhog server",
     "build": "roadhog build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

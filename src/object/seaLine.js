@@ -8,6 +8,7 @@ export default class seaLine {
     this.boat = boat;
     this.id = Math.random();
     this.launcher = pls;
+    this.color = color;
     this.curves = [];
     this.pointArray = [];
     this.curveArray = [];
@@ -38,21 +39,19 @@ export default class seaLine {
     }
     this.pointArray = points;
 
+    this.dashMat = new THREE.LineDashedMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.5,
+      dashSize: 1
+    });
     for (let i = 0; i < points.length; i++) {
       let bz = new THREE.SplineCurve(points[i]);
       let bzPoints = bz.getPoints(100);
       bzPoints = bzPoints.map(e => {
         return new THREE.Vector3(e.x, e.y, 1);
       });
-      let curve = new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(bzPoints),
-        new THREE.LineDashedMaterial({
-          color: color,
-          transparent: true,
-          opacity: 0.5,
-          dashSize: 1
-        })
-      );
+      let curve = new THREE.Line(new THREE.BufferGeometry().setFromPoints(bzPoints), this.dashMat);
       curve.computeLineDistances();
 
       this.curves.push(curve);
@@ -119,5 +118,22 @@ export default class seaLine {
     this.curves.forEach(e => {
       scene.remove(e);
     });
+  }
+
+  changeLineColor(color) {
+    this.launcher[1].changeMatColor(color);
+  }
+  recoveLineColor() {
+    this.launcher[1].changeMatColor(this.color);
+  }
+
+  changeDashColor(color) {
+    this.dashMat.color.set(new THREE.Color(color));
+    this.dashMat.dashSize = 2;
+  }
+
+  recoveDashColor() {
+    this.dashMat.color.set(new THREE.Color(this.color));
+    this.dashMat.dashSize = 1;
   }
 }
