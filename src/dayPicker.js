@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import style from "./sources/dayPicker.css";
+import styles from "./sources/dayPicker.css";
 export default class DayPicker extends Component {
   constructor(props) {
     super(props);
@@ -14,9 +14,9 @@ export default class DayPicker extends Component {
 
   render() {
     return (
-      <div className={style.day_pick}>
+      <div className={styles.day_pick}>
         {this.days.map((e, i) => (
-          <div className={style.picker} key={i}>
+          <div className={styles.picker} key={i}>
             <input
               type="radio"
               name="day"

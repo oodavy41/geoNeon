@@ -131,12 +131,13 @@ export default class WorldMap extends Component {
     this.renderer.render(this.scene, this.camera);
     this.update(0);
 
-    this.container.addEventListener("dblclick", e => {
+    this.containerDBclick = e => {
       this.back();
-    });
+    };
+    this.container.addEventListener("dblclick", this.containerDBclick);
   }
   componentWillUnmount() {
-    this.container.removeEventListener("dblclick");
+    this.container.removeEventListener("dblclick", this.containerDBclick);
   }
   componentDidUpdate() {
     let flag = this.props.pickState;
@@ -244,7 +245,7 @@ export default class WorldMap extends Component {
 
   back() {
     let line = this.focuseLine;
-    line.recoveDashColor();
+    line && line.recoveDashColor();
 
     this.ani && this.ani.pause();
     let centerX = SET.center[0] * SET.widthScale,

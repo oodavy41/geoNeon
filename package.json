@@ -2,6 +2,10 @@
   "name": "neonmap",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "roadhog server",
+    "build": "roadhog build -c ./.webpackrc.prod.js"
+  },
   "dependencies": {
     "animejs": "^3.0.1",
     "antd": "^3.16.6",

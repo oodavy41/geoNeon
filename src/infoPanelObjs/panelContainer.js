@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import BoxNumPanel from "./boxNumPanel";
 import Punctuality from "./punctualityPanel";
 
-import style from "./panelContainer.css";
+import styles from "./panelContainer.css";
 
 import boxNumIcon from "../sources/boxNum.png";
 import punctualityIcon from "../sources/punctuality.png";
@@ -16,14 +16,14 @@ export default class PanelContainer extends Component {
   }
   render() {
     return (
-      <div className={style.main}>
-        <div className={style.switcher}>
-          <div className={style.switchBtn}>
-            <div className={style.icon} style={{ backgroundImage: `url(${boxNumIcon})` }}></div>箱量
+      <div className={styles.main}>
+        <div className={styles.switcher}>
+          <div className={styles.switchBtn}>
+            <div className={styles.icon} style={{ backgroundImage: `url(${boxNumIcon})` }}></div>箱量
           </div>
-          <div className={style.switchBtn}>
+          <div className={styles.switchBtn}>
             <div
-              className={style.icon}
+              className={styles.icon}
               style={{
                 backgroundImage: `url(${punctualityIcon})`
               }}

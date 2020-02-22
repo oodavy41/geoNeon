@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import style from "./sources/linePicker.css";
+import styles from "./sources/linePicker.css";
 
 export default class LinePicker extends Component {
   constructor(props) {
@@ -36,10 +36,10 @@ export default class LinePicker extends Component {
 
   render() {
     return (
-      <div className={style.line_pick}>
+      <div className={styles.line_pick}>
         {this.lines.map((e, i) => {
           return (
-            <div className={style.line_picker} key={i}>
+            <div className={styles.line_picker} key={i}>
               <input
                 onClick={() => this.change(e)}
                 type="radio"

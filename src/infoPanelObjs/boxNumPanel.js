@@ -5,7 +5,7 @@ import "echarts/lib/chart/bar";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 
-import style from "./boxNumPanel.css";
+import styles from "./boxNumPanel.css";
 export default class Punctuality extends Component {
   constructor(props) {
     super(props);
@@ -182,9 +182,9 @@ export default class Punctuality extends Component {
   render() {
     return (
       <div>
-        <div className={style.switcher}>
+        <div className={styles.switcher}>
           <div
-            className={`${style.switchBtn} ${this.state.monthly ? style.pickedBtn : ""}`}
+            className={`${styles.switchBtn} ${this.state.monthly ? styles.pickedBtn : ""}`}
             onClick={() => {
               this.setState({ monthly: true });
             }}
@@ -192,7 +192,7 @@ export default class Punctuality extends Component {
             月度
           </div>
           <div
-            className={`${style.switchBtn} ${this.state.monthly ? "" : style.pickedBtn}`}
+            className={`${styles.switchBtn} ${this.state.monthly ? "" : styles.pickedBtn}`}
             onClick={() => {
               this.setState({ monthly: false });
             }}
@@ -200,7 +200,7 @@ export default class Punctuality extends Component {
             年度
           </div>
         </div>
-        <div className={style.echarts} ref={e => (this.echartDiv = e)} />
+        <div className={styles.echarts} ref={e => (this.echartDiv = e)} />
       </div>
     );
   }

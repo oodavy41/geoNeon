@@ -1,6 +1,6 @@
 import { Table, Carousel, Tag } from "antd";
 import React, { Component } from "react";
-import style from "./sources/antdPanel.css";
+import styles from "./sources/antdPanel.css";
 
 const { CheckableTag } = Tag;
 export default class APanel extends Component {
@@ -77,8 +77,8 @@ export default class APanel extends Component {
     ];
 
     pages.push(
-      <div className={style.linePanel} key={key}>
-        <div className={style.areaTitle}>
+      <div className={styles.linePanel} key={key}>
+        <div className={styles.areaTitle}>
           <span>{key}</span>
           <br />
           <span>-</span>
@@ -87,7 +87,7 @@ export default class APanel extends Component {
         </div>
         {/* <hr /> */}
         <Table
-          id={style.Table}
+          id={styles.Table}
           onRowClick={r => {
             this.props.onpickline(r.lineC);
           }}
@@ -111,11 +111,11 @@ export default class APanel extends Component {
       );
     }
     return (
-      <div className={style.rightPanel}>
+      <div className={styles.rightPanel}>
         {pages}
         {/* <Carousel dotPosition="left">{pages}</Carousel> */}
-        <div className={style.tagPanel}>
-          <div className={style.tagIcon}>
+        <div className={styles.tagPanel}>
+          <div className={styles.tagIcon}>
             <span>船公司</span>
           </div>
           {compTags}

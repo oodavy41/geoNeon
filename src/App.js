@@ -5,7 +5,7 @@ import LinePicker from "./linePicker";
 import sealineData from "./sources/data.json";
 import APanel from "./antdPanel";
 
-import style from "./style.css";
+import styles from "./style.css";
 
 import "antd/dist/antd.css";
 import InfoPanel from "./infoPanel";
@@ -74,7 +74,7 @@ export default class App extends Component {
   render() {
     return (
       <div style={{ width: "1920px", height: "1080px" }}>
-        {/* <div className={style.title}>上海港全球航线</div> */}
+        {/* <div className={styles.title}>上海港全球航线</div> */}
         <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
         {!this.state.pickLine ? (
           <div>

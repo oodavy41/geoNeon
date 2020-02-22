@@ -5,7 +5,7 @@ import "echarts/lib/chart/line";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 
-import style from "./punctualityPanel.css";
+import styles from "./punctualityPanel.css";
 export default class Punctuality extends Component {
   constructor(props) {
     super(props);
@@ -138,7 +138,7 @@ export default class Punctuality extends Component {
           percent={89}
           status="active"
         />
-        <div className={style.echarts} ref={e => (this.echartDiv = e)} />
+        <div className={styles.echarts} ref={e => (this.echartDiv = e)} />
         <Table dataSource={tagSource} columns={columns} pagination={false} showHeader={false} size="small" />
       </div>
     );
