@@ -16,7 +16,7 @@ export default class PanelContainer extends Component {
   }
   render() {
     return (
-      <div className={styles.main}>
+      <div className={styles.infoPanelMain}>
         <div className={styles.switcher}>
           <div className={styles.switchBtn}>
             <div className={styles.icon} style={{ backgroundImage: `url(${boxNumIcon})` }}></div>箱量

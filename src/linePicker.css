@@ -1,5 +1,5 @@
 .line_pick {
-  position: fixed;
+  position: absolute;
   width: 1300px;
   left: 270px;
   top: 20px;

@@ -33,7 +33,7 @@ export default class Punctuality extends Component {
         left: "3%",
         right: "4%",
         bottom: "3%",
-        top: "2%",
+        top: "5%",
         containLabel: true
       },
       xAxis: {
@@ -181,7 +181,7 @@ export default class Punctuality extends Component {
   }
   render() {
     return (
-      <div>
+      <div className={styles.boxNumPanel}>
         <div className={styles.switcher}>
           <div
             className={`${styles.switchBtn} ${this.state.monthly ? styles.pickedBtn : ""}`}

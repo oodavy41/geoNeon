@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as THREE from "three";
-import mapVec from "./geoJsons/countries.json";
+import mapVec from "./geoJsons/world-110m.json";
 import rivers from "./geoJsons/rivers.json";
 import lakes from "./geoJsons/lakes.json";
 import cities from "./geoJsons/cities.json";
@@ -71,6 +71,7 @@ export default class WorldMap extends Component {
     this.scene.add(envlight);
 
     let world = drawThreeGeo(mapVec, 1, "plane", ["ATA", "GRL"]);
+    console.log(world);
     // drawThreeGeo(rivers, 1, "plane", { color: SET.waterColor }, this.scene);
     // drawThreeGeo(lakes, 1, "plane", { color: SET.waterColor }, this.scene);
     let worldTex = new THREE.TextureLoader().load(earthNightMap);

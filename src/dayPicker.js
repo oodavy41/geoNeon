@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styles from "./sources/dayPicker.css";
+import styles from "./dayPicker.css";
 export default class DayPicker extends Component {
   constructor(props) {
     super(props);

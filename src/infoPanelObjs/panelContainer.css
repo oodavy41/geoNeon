@@ -1,17 +1,18 @@
-.main {
+.infoPanelMain {
+  padding-top: 50px;
   width: 547px;
 }
-.switcher {
+.infoPanelMain .switcher {
   width: 547px;
 }
-.switchBtn {
+.infoPanelMain .switchBtnBig {
   display: inline-block;
   width: 270px;
   text-align: center;
   font-size: 24px;
   color: #628fd9;
 }
-.icon {
+.infoPanelMain .icon {
   display: inline-block;
   vertical-align: text-bottom;
   width: 34px;

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WorldMap from "./worldMap";
 import DayPicker from "./dayPicker";
 import LinePicker from "./linePicker";
-import sealineData from "./sources/data.json";
+import sealineData from "./sources/dataold.json";
 import APanel from "./antdPanel";
 
 import styles from "./style.css";
@@ -30,6 +30,9 @@ export default class App extends Component {
         this.areaHash[e.areaC] = [];
       }
       this.areaHash[e.areaC].push(e);
+      if (!e.day) {
+        e.day = Math.round(Math.random(7));
+      }
       return e;
     });
     this.pickedSealine = sealineData;
@@ -73,7 +76,7 @@ export default class App extends Component {
   }
   render() {
     return (
-      <div style={{ width: "1920px", height: "1080px" }}>
+      <div style={{ position: "relative", width: "1920px", height: "1080px" }}>
         {/* <div className={styles.title}>上海港全球航线</div> */}
         <WorldMap sealine={this.sealineData} areaMask={this.areas} pickState={this.state} offPick={() => this.offPickLine()} />
         {!this.state.pickLine ? (

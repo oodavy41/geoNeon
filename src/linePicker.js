@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styles from "./sources/linePicker.css";
+import styles from "./linePicker.css";
 
 export default class LinePicker extends Component {
   constructor(props) {

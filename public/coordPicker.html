@@ -29,11 +29,12 @@
 </style>
 <body>
 <div id="container" class="map"></div>
-<button id="undo" class="button"></button>
+<button id="delete" class="deleteBtn">清空</button>
 <div class="input-card">
     <div class="input-item">
       <input type="text" id="search" />
     </div>
+    <button class="delete" onClick="clearCoords()"></button>
     <h4>左击获取经纬度：</h4>
     <div class="input-item">
       <textarea readonly="true" wrap="virtual" id="lnglat"></textarea>
@@ -86,6 +87,12 @@
       map.remove(mark.marker)
     }
   })
+
+  function clearCoords(){
+    coords=[];
+    map.clearMap();
+    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[0]},${e.coord[1]}]`}).join(",");
+  } 
 
   function addpoint(lat,lng){
     var marker = new AMap.Marker({

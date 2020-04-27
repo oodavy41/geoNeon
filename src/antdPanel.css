@@ -1,7 +1,7 @@
 .rightPanel {
   height: 260px;
   border-radius: 5px;
-  position: fixed;
+  position: absolute;
   display: flex;
   top: 780px;
   left: 220px;
@@ -73,7 +73,7 @@
   line-height: 35px;
   vertical-align: middle;
   color: rgba(255, 171, 0, 1);
-  background-image: url(./search.png);
+  background-image: url(./sources/search.png);
   background-repeat: no-repeat;
   background-size: 20px 16px;
   padding-left: 30px;
