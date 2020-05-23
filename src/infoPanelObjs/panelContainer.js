@@ -18,20 +18,28 @@ export default class PanelContainer extends Component {
     return (
       <div className={styles.infoPanelMain}>
         <div className={styles.switcher}>
-          <div className={styles.switchBtn}>
-            <div className={styles.icon} style={{ backgroundImage: `url(${boxNumIcon})` }}></div>箱量
+          <div className={styles.switchBtnBig}>
+            <div
+              className={styles.icon}
+              style={{ backgroundImage: `url(${boxNumIcon})` }}
+            ></div>
+            箱量
           </div>
-          <div className={styles.switchBtn}>
+          <div className={styles.switchBtnBig}>
             <div
               className={styles.icon}
               style={{
-                backgroundImage: `url(${punctualityIcon})`
+                backgroundImage: `url(${punctualityIcon})`,
               }}
             ></div>
             准班率
           </div>
         </div>
-        {this.state.showing === "boxNum" ? <BoxNumPanel></BoxNumPanel> : <Punctuality></Punctuality>}
+        {this.state.showing === "boxNum" ? (
+          <BoxNumPanel></BoxNumPanel>
+        ) : (
+          <Punctuality></Punctuality>
+        )}
       </div>
     );
   }

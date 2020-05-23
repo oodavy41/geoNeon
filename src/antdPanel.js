@@ -19,9 +19,9 @@ export default class APanel extends Component {
       this.areaMap[key] = rows;
       this.allrow.push(...rows);
       rows.forEach(e => {
-        if (!this.comps[e.compC]) {
-          this.comps[e.compC] = e.compN;
-          compsChecked[e.compC] = false;
+        if (!this.comps[e.cmpyC]) {
+          this.comps[e.cmpyC] = e.cmpyN;
+          compsChecked[e.cmpyC] = false;
         }
       });
     }
@@ -42,7 +42,7 @@ export default class APanel extends Component {
     }
     this.props.onchange(msg);
   }
-  //{points:[],lineC:"",lineN:"",compC:"",compN:"",areaC:"",areaN:""}
+  //{points:[],lineC:"",lineN:"",cmpyC:"",cmpyN:"",areaC:"",areaN:""}
   render() {
     let picked = this.props.pickInfo;
     let key = picked.pickArea;
@@ -61,8 +61,8 @@ export default class APanel extends Component {
       },
       {
         title: "公司",
-        dataIndex: "compN",
-        key: "compN"
+        dataIndex: "cmpyN",
+        key: "cmpyN"
       },
       {
         title: "所属洲",

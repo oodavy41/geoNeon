@@ -17,10 +17,14 @@ export default class seaLine {
     let splitpos = [];
 
     for (let i = 0; i < points.length - 1; i++) {
-      if (Math.abs(points[i].x - points[i + 1].x) > SET.earthS * SET.widthScale * 0.7) {
+      if (
+        Math.abs(points[i].x - points[i + 1].x) >
+        SET.earthS * SET.widthScale * 0.7
+      ) {
         splitpos.push(i);
       }
     }
+    console.log(boat.sealineInfo, points);
 
     if (splitpos.length > 0) {
       let proPoints = points;
@@ -43,15 +47,18 @@ export default class seaLine {
       color: color,
       transparent: true,
       opacity: 0.5,
-      dashSize: 1
+      dashSize: 1,
     });
     for (let i = 0; i < points.length; i++) {
       let bz = new THREE.SplineCurve(points[i]);
       let bzPoints = bz.getPoints(100);
-      bzPoints = bzPoints.map(e => {
+      bzPoints = bzPoints.map((e) => {
         return new THREE.Vector3(e.x, e.y, 1);
       });
-      let curve = new THREE.Line(new THREE.BufferGeometry().setFromPoints(bzPoints), this.dashMat);
+      let curve = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(bzPoints),
+        this.dashMat
+      );
       curve.computeLineDistances();
 
       this.curves.push(curve);
@@ -63,13 +70,9 @@ export default class seaLine {
 
   play(index) {
     let i = index % this.curveArray.length;
-    if (this.launcher) {
-      this.launcher.forEach(e => {
-        i === 0 && e.complete && e.complete();
-        e.switch && e.switch(i);
-      });
-    }
+    this.playing = i;
     let bzPoints = this.curveArray[i];
+
     this.boat.position.copy(bzPoints[0]);
     let points = bzPoints.map((e, i) => {
       let { x, y, z } = e;
@@ -91,15 +94,15 @@ export default class seaLine {
       endDelay: i === this.curveArray.length - 1 ? 2000 : 0,
       easing: "linear",
       direction: "alternate",
-      update: a => {
+      update: (a) => {
         this.boat.position.set(target.x, target.y, target.z + 0.1);
-        this.launcher.forEach(e => {
+        this.launcher.forEach((e) => {
           e.update && e.update();
         });
       },
-      complete: a => {
+      complete: (a) => {
         this.anime = this.play(i + 1);
-      }
+      },
     });
     return ani;
   }
@@ -108,14 +111,14 @@ export default class seaLine {
   }
   show(scene) {
     scene.add(this.boat);
-    this.curves.forEach(e => {
+    this.curves.forEach((e) => {
       scene.add(e);
     });
   }
 
   hide(scene) {
     scene.remove(this.boat);
-    this.curves.forEach(e => {
+    this.curves.forEach((e) => {
       scene.remove(e);
     });
   }
@@ -125,6 +128,18 @@ export default class seaLine {
   }
   recoveLineColor() {
     this.launcher[1].changeMatColor(this.color);
+  }
+
+  focus() {
+    if (this.launcher) {
+      let e = this.launcher[1];
+      e.complete();
+      e.switch(new THREE.CatmullRomCurve3(this.curveArray[this.playing]));
+    }
+  }
+
+  back() {
+    this.launcher[1].complete();
   }
 
   changeDashColor(color) {

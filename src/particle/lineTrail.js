@@ -6,42 +6,34 @@ export default class lineTrail {
     this.parent = parent;
     this.color = color;
     this.scene = scene;
-    this.curves = [];
-    this.index = 0;
-    this.mat = new THREE.LineBasicMaterial({
+    this.obj = null;
+    this.mat = new THREE.MeshLambertMaterial({
       color: this.color,
       transparent: true,
-      opacity: global.Sets.trailOpacity
+      opacity: global.Sets.trailOpacity,
     });
   }
 
-  update() {
-    let now = new THREE.Vector3();
-    now.copy(this.parent.position);
-    this.curves[this.index].points.push(now);
-    this.curves[this.index].obj.geometry.setFromPoints(this.curves[this.index].points);
-    this.curves[this.index].obj.geometry.verticesNeedUpdate = true;
-    this.curves[this.index].obj.geometry.computeBoundingSphere();
-  }
+  update() {}
 
-  switch(index) {
-    if (!this.curves[index]) {
-      let geo = new THREE.BufferGeometry();
-      let mat = this.mat;
-      let line = new THREE.Line(geo, mat);
-      line["sealineInfo"] = this.parent.sealineInfo;
-      this.curves[index] = { obj: line, points: [] };
+  switch(curve) {
+    if (this.obj) {
+      this.scene.remove(this.obj);
     }
-    this.curves[index].obj.geometry.setFromPoints(this.curves[this.index].points);
-    this.curves[index].obj.layers.mask = this.parent.layers.mask;
-    this.scene.add(this.curves[index].obj);
-    this.index = index;
+    let line = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 100, 0.2, 5, false),
+      this.mat
+    );
+    line["sealineInfo"] = this.parent.sealineInfo;
+    line.layers.mask = this.parent.layers.mask;
+    this.scene.add(line);
+    this.obj = line;
   }
   complete() {
-    this.curves.forEach(e => {
-      this.scene.remove(e.obj);
-      e.points = [];
-    });
+    if (this.obj) {
+      this.scene.remove(this.obj);
+      this.obj = null;
+    }
   }
 
   changeMatColor(color) {

@@ -26,7 +26,7 @@ export default class infoPanel extends Component {
               className={styles.lineInfoIcon}
               style={{ backgroundImage: `url(${downIcon})` }}
             ></div>
-            {info.compN + '-' + info.compC}
+            {info.cmpyN + '-' + info.cmpyC}
           </div>
           <EchartPanel></EchartPanel>
         </div>

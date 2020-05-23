@@ -3,8 +3,8 @@ import textFrag from "./fragment";
 export default class FragFactory {
   constructor(font = undefined, color = undefined) {
     this.canvas = document.createElement("canvas");
-    this.canvas.width = 512;
-    this.canvas.height = 10240;
+    this.canvas.width = 256;
+    this.canvas.height = 20480;
     this.ctx = this.canvas.getContext("2d");
     this.defaultFont = font || 20;
     this.defaultColor = color || "#afafaf";

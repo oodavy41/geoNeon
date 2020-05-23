@@ -18,7 +18,7 @@ global.Sets = {
   boatSize: 1.8,
 
   trailWidth: 2,
-  trailOpacity: 1,
+  trailOpacity: 0.6,
 
   geoLineColor: 0x5299d3,
   backgroundColor: 0x12122c,

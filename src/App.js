@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WorldMap from "./worldMap";
 import DayPicker from "./dayPicker";
 import LinePicker from "./linePicker";
-import sealineData from "./sources/dataold.json";
+import sealineData from "./sources/fullLinesInfo.json";
 import APanel from "./antdPanel";
 
 import styles from "./style.css";
@@ -31,7 +31,7 @@ export default class App extends Component {
       }
       this.areaHash[e.areaC].push(e);
       if (!e.day) {
-        e.day = Math.round(Math.random(7));
+        e.day = Math.round(Math.random()*7);
       }
       return e;
     });
@@ -69,7 +69,7 @@ export default class App extends Component {
       return (
         (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
         (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-        (flag.pickComps.find(v => v === eflag.compC) || flag.pickComps.length === 0)
+        (flag.pickComps.find(v => v === eflag.cmpyC) || flag.pickComps.length === 0)
       );
     });
     console.log(this.pickedSealine);
