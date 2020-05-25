@@ -1,0 +1,24 @@
+.infoPanelMain {
+  padding-top: 50px;
+  width: 547px;
+}
+.infoPanelMain .switcher {
+  width: 547px;
+}
+.infoPanelMain .switchBtnBig {
+  display: inline-block;
+  width: 270px;
+  text-align: center;
+  font-size: 24px;
+  color: #628fd9;
+}
+.infoPanelMain .icon {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 34px;
+  height: 30px;
+  margin-right: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}

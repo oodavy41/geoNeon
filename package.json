@@ -2,11 +2,15 @@
   "name": "neonmap",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "roadhog server",
+    "build": "roadhog build -c ./.webpackrc.prod.js"
+  },
   "dependencies": {
     "animejs": "^3.0.1",
     "antd": "^3.16.6",
-    "babel-plugin-import": "^1.12.0",
     "cdt2d": "^1.0.0",
+    "echarts": "^4.2.1",
     "poly2tri": "^1.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -16,18 +20,12 @@
     "typescript": "^3.4.3"
   },
   "scripts": {
-    "start": "roadhog dev",
+    "start": "roadhog server",
     "build": "roadhog build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  }
 }

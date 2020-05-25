@@ -1,13 +1,16 @@
 import * as THREE from "three";
 import anime from "animejs";
+
+import curveTube from "./curveTube";
 import "../settings";
 
 const SET = global.Sets;
 export default class seaLine {
-  constructor(points, color, boat, pls) {
+  constructor(points, color, boat, scene, pls) {
     this.boat = boat;
     this.id = Math.random();
     this.launcher = pls;
+    this.color = color;
     this.curves = [];
     this.pointArray = [];
     this.curveArray = [];
@@ -16,7 +19,10 @@ export default class seaLine {
     let splitpos = [];
 
     for (let i = 0; i < points.length - 1; i++) {
-      if (Math.abs(points[i].x - points[i + 1].x) > SET.earthS * SET.widthScale * 0.7) {
+      if (
+        Math.abs(points[i].x - points[i + 1].x) >
+        SET.earthS * SET.widthScale * 0.7
+      ) {
         splitpos.push(i);
       }
     }
@@ -28,48 +34,55 @@ export default class seaLine {
       for (let i = 0; i < splitpos.length; i++) {
         points.push(proPoints.slice(splitpos[i] + 1, splitpos[i + 1]));
         let v = points[i][points[i].length - 1];
-        let left = v.x < SET.center[0];
-        points[i].push(new THREE.Vector3(left ? SET.center[0] - SET.earthS / 2 : SET.center[0] + SET.earthS / 2, v.y, v.z));
-        points[i + 1].unshift(new THREE.Vector3(left ? SET.center[0] + SET.earthS / 2 : SET.center[0] - SET.earthS / 2, v.y, v.z));
+        let mapWidth = SET.earthS * SET.widthScale;
+        let left = v.x < mapWidth / 2;
+        points[i].push(new THREE.Vector3(left ? 0 : mapWidth, v.y, v.z));
+        points[i + 1].unshift(new THREE.Vector3(left ? mapWidth : 0, v.y, v.z));
       }
     } else {
       points = [points];
     }
     this.pointArray = points;
 
+    this.dashMat = new THREE.LineDashedMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.5,
+      dashSize: 1,
+    });
     for (let i = 0; i < points.length; i++) {
       let bz = new THREE.SplineCurve(points[i]);
       let bzPoints = bz.getPoints(100);
-      bzPoints = bzPoints.map(e => {
+      bzPoints = bzPoints.map((e) => {
         return new THREE.Vector3(e.x, e.y, 1);
       });
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
-        new THREE.LineDashedMaterial({
-          color: color,
-          transparent: true,
-          opacity: 0.5,
-          dashSize: 1
-        })
+        this.dashMat
       );
       curve.computeLineDistances();
-
+      curve["sealineInfo"] = boat.sealineInfo;
       this.curves.push(curve);
       this.curveLength.push(bz.getLength());
       this.curveArray.push(bzPoints);
     }
+
+    this.tube = new curveTube(boat.color, scene, boat, this.curveArray);
+
     this.anime = this.play(0);
   }
 
   play(index) {
     let i = index % this.curveArray.length;
+    this.playing = i;
     if (this.launcher) {
-      this.launcher.forEach(e => {
+      this.launcher.forEach((e) => {
         i === 0 && e.complete && e.complete();
         e.switch && e.switch(i);
       });
     }
     let bzPoints = this.curveArray[i];
+
     this.boat.position.copy(bzPoints[0]);
     let points = bzPoints.map((e, i) => {
       let { x, y, z } = e;
@@ -91,15 +104,15 @@ export default class seaLine {
       endDelay: i === this.curveArray.length - 1 ? 2000 : 0,
       easing: "linear",
       direction: "alternate",
-      update: a => {
+      update: (a) => {
         this.boat.position.set(target.x, target.y, target.z + 0.1);
-        this.launcher.forEach(e => {
+        this.launcher.forEach((e) => {
           e.update && e.update();
         });
       },
-      complete: a => {
+      complete: (a) => {
         this.anime = this.play(i + 1);
-      }
+      },
     });
     return ani;
   }
@@ -108,15 +121,40 @@ export default class seaLine {
   }
   show(scene) {
     scene.add(this.boat);
-    this.curves.forEach(e => {
+    this.curves.forEach((e) => {
       scene.add(e);
     });
   }
 
   hide(scene) {
     scene.remove(this.boat);
-    this.curves.forEach(e => {
+    this.curves.forEach((e) => {
       scene.remove(e);
     });
+  }
+
+  changeLineColor(color) {
+    this.launcher[1].changeMatColor(color);
+  }
+  recoveLineColor() {
+    this.launcher[1].changeMatColor(this.color);
+  }
+
+  focus() {
+    this.tube.show();
+  }
+
+  back() {
+    this.tube.hide();
+  }
+
+  changeDashColor(color) {
+    this.dashMat.color.set(new THREE.Color(color));
+    this.dashMat.dashSize = 2;
+  }
+
+  recoveDashColor() {
+    this.dashMat.color.set(new THREE.Color(this.color));
+    this.dashMat.dashSize = 1;
   }
 }

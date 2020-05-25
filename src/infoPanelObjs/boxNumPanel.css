@@ -1,0 +1,23 @@
+.boxNumPanel .switcher {
+  margin: 20px;
+}
+
+.boxNumPanel .switchBtn {
+  display: inline-block;
+  width: 60px;
+  height: 21px;
+  margin: 0 5px;
+  font-size: 16px;
+  line-height: 21px;
+  text-align: center;
+  border: 1px solid #11ceff;
+  color: #11ceff;
+}
+.boxNumPanel .pickedBtn {
+  background-color: #11ceff;
+  color: #181e41;
+}
+.boxNumPanel .echarts {
+  width: 574px;
+  height: 421px;
+}

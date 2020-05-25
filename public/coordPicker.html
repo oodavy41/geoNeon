@@ -29,11 +29,12 @@
 </style>
 <body>
 <div id="container" class="map"></div>
-<button id="undo" class="button"></button>
+<button id="delete" class="deleteBtn">清空</button>
 <div class="input-card">
     <div class="input-item">
       <input type="text" id="search" />
     </div>
+    <button class="delete" onClick="clearCoords()"></button>
     <h4>左击获取经纬度：</h4>
     <div class="input-item">
       <textarea readonly="true" wrap="virtual" id="lnglat"></textarea>
@@ -46,11 +47,7 @@
 <script src="https://webapi.amap.com/maps?v=1.4.14&key=67b4b19e0b19792352244afd39397457&plugin=AMap.Autocomplete"></script>
 <script type="text/javascript">
   var map = new AMap.Map("container", {
-      resizeEnable: true,
-      mapStyle:"amap://styles/befcc40b31999809db969671abd2749a",
-      features:['road','bg'],
-      viewMode:"3D",
-      zoom:3
+      resizeEnable: true
   });
   var search = document.getElementById("search");
   
@@ -91,6 +88,12 @@
     }
   })
 
+  function clearCoords(){
+    coords=[];
+    map.clearMap();
+    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[0]},${e.coord[1]}]`}).join(",");
+  } 
+
   function addpoint(lat,lng){
     var marker = new AMap.Marker({
       icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
@@ -98,7 +101,7 @@
     });
     map.add(marker);
     coords.push({coord:[lng,lat],marker:marker})
-    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[1]},${e.coord[0]}]`}).join(",");
+    document.getElementById("lnglat").value = coords.map(e=> {return `[${e.coord[1]},${e.coord[0]},]`}).join(",");
   }
 
   var auto = new AMap.Autocomplete({

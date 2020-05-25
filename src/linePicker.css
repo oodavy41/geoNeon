@@ -1,0 +1,41 @@
+.line_pick {
+  position: absolute;
+  width: 1300px;
+  left: 270px;
+  top: 20px;
+}
+.line_pick .line_picker {
+  float: left;
+  margin: 5px;
+  width: 90px;
+  height: 36px;
+}
+.line_pick span {
+  pointer-events: none;
+  z-index: 99;
+  width: 90px;
+  height: 36px;
+  text-align: center;
+  line-height: 36px;
+  color: aliceblue;
+  position: absolute;
+  margin-left: -90px;
+}
+
+.line_pick input:hover {
+  opacity: 0.7;
+}
+
+.line_pick input {
+  z-index: -99;
+  appearance: none;
+  width: 90px;
+  height: 36px;
+  border-radius: 0px;
+  background: #e05c72;
+  opacity: 0.5;
+}
+
+.line_pick input:checked {
+  opacity: 0.9;
+}

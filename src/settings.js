@@ -1,8 +1,7 @@
 let earthS = 400.953427900472 * 1.2;
 global.Sets = {
   earthS: earthS,
-  center: [(earthS * 11) / 12, earthS * 0.35],
-  Xoffset: -30,
+  center: [earthS / 2, earthS / 4],
 
   heightScale: 1.3,
   widthScale: 1,
@@ -18,14 +17,15 @@ global.Sets = {
 
   boatSize: 1.8,
 
-  trailWidth: 1,
-  trailOpacity: 1,
+  trailWidth: 2,
+  trailOpacity: 0.6,
 
   geoLineColor: 0x5299d3,
   backgroundColor: 0x12122c,
   sunLightColor: 0xfff4f4,
 
-  boatColors: ["#4d3080",
+  boatColors: [
+    "#4d3080",
     "#062e6b",
     "#4e7191",
     "#2e681e",
@@ -37,5 +37,6 @@ global.Sets = {
     "#864972",
     "#835d1c",
     "#053d4c",
-    "#847c30"]
+    "#847c30"
+  ]
 };

@@ -12,6 +12,7 @@ export default class lineParticle extends THREE.Line {
     super(line, mat);
     this.sealineInfo = parent.sealineInfo;
     let target = { opacity: 100 };
+    let self=this
     this.anime = anime({
       targets: target,
       opacity: 0,
@@ -23,7 +24,7 @@ export default class lineParticle extends THREE.Line {
       },
       complete: a => {
         scene.remove(this);
-        delete this;
+        // delete self;
       }
     });
   }

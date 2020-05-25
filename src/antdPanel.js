@@ -1,6 +1,6 @@
 import { Table, Carousel, Tag } from "antd";
 import React, { Component } from "react";
-import style from "./sources/antdPanel.css";
+import styles from "./antdPanel.css";
 
 const { CheckableTag } = Tag;
 export default class APanel extends Component {
@@ -18,15 +18,15 @@ export default class APanel extends Component {
       });
       this.areaMap[key] = rows;
       this.allrow.push(...rows);
-      rows.forEach(e => {
-        if (!this.comps[e.compC]) {
-          this.comps[e.compC] = e.compN;
-          compsChecked[e.compC] = false;
+      rows.forEach((e) => {
+        if (!this.comps[e.cmpyC]) {
+          this.comps[e.cmpyC] = e.cmpyN;
+          compsChecked[e.cmpyC] = false;
         }
       });
     }
     this.state = {
-      compsCheck: compsChecked
+      compsCheck: compsChecked,
     };
   }
 
@@ -42,7 +42,7 @@ export default class APanel extends Component {
     }
     this.props.onchange(msg);
   }
-  //{points:[],lineC:"",lineN:"",compC:"",compN:"",areaC:"",areaN:""}
+  //{points:[],lineC:"",lineN:"",cmpyC:"",cmpyN:"",areaC:"",areaN:""}
   render() {
     let picked = this.props.pickInfo;
     let key = picked.pickArea;
@@ -52,33 +52,33 @@ export default class APanel extends Component {
       {
         title: "航线代码",
         dataIndex: "lineC",
-        key: "lineC"
+        key: "lineC",
       },
       {
         title: "航线名称",
         dataIndex: "lineN",
-        key: "lineN"
+        key: "lineN",
       },
       {
         title: "公司",
-        dataIndex: "compN",
-        key: "compN"
+        dataIndex: "cmpyN",
+        key: "cmpyN",
       },
       {
         title: "所属洲",
         dataIndex: "areaN",
-        key: "areaN"
+        key: "areaN",
       },
       {
         title: "洲代码",
         dataIndex: "areaC",
-        key: "areaC"
-      }
+        key: "areaC",
+      },
     ];
 
     pages.push(
-      <div className={style.linePanel} key={key}>
-        <div className={style.areaTitle}>
+      <div className={styles.linePanel} key={key}>
+        <div className={styles.areaTitle}>
           <span>{key}</span>
           <br />
           <span>-</span>
@@ -87,35 +87,38 @@ export default class APanel extends Component {
         </div>
         {/* <hr /> */}
         <Table
-          id={style.Table}
-          onRowClick={r => {
+          id={styles.Table}
+          onRowClick={(r) => {
             this.props.onpickline(r.lineC);
           }}
           scroll={{ y: 240, x: 600 }}
           pagination={false}
           showHeader={false}
           size="small"
-          dataSource={key === "All" ? this.allrow : this.areaMap[key]}
+          // dataSource={key === "All" ? this.allrow : this.areaMap[key]}
+          dataSource={this.props.pickedSealines}
           columns={columns}
         />
       </div>
     );
     for (let k in this.comps) {
       compTags.push(
-        <CheckableTag checked={this.state.compsCheck[k]} onChange={checked => this.onCheck(k, checked)} key={k}>{`${k} - ${
-          this.comps[k]
-        }`}</CheckableTag>
+        <CheckableTag
+          checked={this.state.compsCheck[k]}
+          onChange={(checked) => this.onCheck(k, checked)}
+          key={k}
+        >{`${k} - ${this.comps[k]}`}</CheckableTag>
       );
     }
     return (
-      <div className={style.rightPanel}>
+      <div className={styles.rightPanel}>
         {pages}
         {/* <Carousel dotPosition="left">{pages}</Carousel> */}
-        <div className={style.tagPanel}>
-          <div className={style.tagIcon}>
+        <div className={styles.tagPanel}>
+          <div className={styles.tagIcon}>
             <span>船公司</span>
           </div>
-          {compTags}
+          <div className={styles.tagContainer}>{compTags}</div>
         </div>
       </div>
     );
