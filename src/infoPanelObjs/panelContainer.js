@@ -15,17 +15,21 @@ export default class PanelContainer extends Component {
     };
   }
   render() {
+
+
     return (
       <div className={styles.infoPanelMain}>
         <div className={styles.switcher}>
-          <div className={styles.switchBtnBig}>
+          <div className={styles.switchBtnBig}
+          onClick={()=>{this.setState({showing:"boxNum"})}}>
             <div
               className={styles.icon}
               style={{ backgroundImage: `url(${boxNumIcon})` }}
             ></div>
             箱量
           </div>
-          <div className={styles.switchBtnBig}>
+        <div className={styles.switchBtnBig}
+        onClick={()=>{this.setState({showing:"punctuality"})}}>
             <div
               className={styles.icon}
               style={{
@@ -36,9 +40,9 @@ export default class PanelContainer extends Component {
           </div>
         </div>
         {this.state.showing === "boxNum" ? (
-          <BoxNumPanel></BoxNumPanel>
+          <BoxNumPanel data={this.props.data.boxnum}></BoxNumPanel>
         ) : (
-          <Punctuality></Punctuality>
+          <Punctuality data={this.props.data.ontime.month}></Punctuality>
         )}
       </div>
     );

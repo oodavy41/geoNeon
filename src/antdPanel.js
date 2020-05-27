@@ -96,7 +96,9 @@ export default class APanel extends Component {
           showHeader={false}
           size="small"
           // dataSource={key === "All" ? this.allrow : this.areaMap[key]}
-          dataSource={this.props.pickedSealines}
+          dataSource={this.props.pickedSealines.sort((a, b) =>
+            a.lineC > b.lineC ? 1 : -1
+          )}
           columns={columns}
         />
       </div>

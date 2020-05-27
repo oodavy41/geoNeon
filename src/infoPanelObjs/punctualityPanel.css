@@ -1,0 +1,16 @@
+.echarts {
+  width: 514px;
+  height: 221px;
+}
+
+.container {
+  padding: 15px 30px;
+  font-size: 16px;
+  color:rgb(161, 200, 230);
+}
+
+.container :global .ant-progress-text {
+  font-size: 14px;
+  color: #fff;
+  float: right;
+}

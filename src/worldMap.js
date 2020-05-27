@@ -37,6 +37,7 @@ export default class WorldMap extends Component {
     this.objs = [];
     this.land = null;
     this.boatBoard = null;
+    this.updateStack = [];
   }
 
   componentDidMount() {
@@ -76,7 +77,7 @@ export default class WorldMap extends Component {
     var envlight = new THREE.AmbientLight(SET.sunLightColor); // soft white light
     this.scene.add(envlight);
 
-    let world = drawThreeGeo(mapVec, 1, "plane", ["ATA", "GRL"]);
+    let world = drawThreeGeo(mapVec, 1, "plane", ["ATA"]);
     console.log(world);
     // drawThreeGeo(rivers, 1, "plane", { color: SET.waterColor }, this.scene);
     // drawThreeGeo(lakes, 1, "plane", { color: SET.waterColor }, this.scene);
@@ -228,18 +229,14 @@ export default class WorldMap extends Component {
   }
 
   focuse(line) {
+    this.ani && this.ani.pause();
     let sealine = line.sealine;
     this.focuseLine = sealine;
-    let slpoints = sealine.curveArray[sealine.curveArray.length - 1];
-    let endPoint = slpoints[slpoints.length - 1];
+    let endPoint = sealine.boat.position;
     this.boatBoard.position.copy(endPoint);
     this.boatBoard.position.y += 2;
     this.boatBoard.position.z = 3;
 
-    sealine.changeDashColor(0xff0000);
-    if (this.ani) {
-      this.ani.pause();
-    }
     if (sealine) {
       let boat = sealine.boat;
       let { x, y, z } = this.camera.position;
@@ -249,9 +246,9 @@ export default class WorldMap extends Component {
         duration: 1000,
         // endDelay: 100000000,
         easing: "easeInQuad",
-        x: endPoint.x - 70,
+        x: endPoint.x + 20,
         y: endPoint.y - 70,
-        z: 70,
+        z: 120,
         autoplay: true,
         round: 1,
         update: (a) => {
@@ -261,16 +258,36 @@ export default class WorldMap extends Component {
           this.camera.rotation.z = 0;
           this.land.meshMat.opacity = (100 - 5 * a.progress) / 100;
           this.land.lineMat.opacity = Math.max(30, 5 * a.progress) / 100;
+          sealine.focus();
         },
         changeComplete: (a) => {
           this.camera.layers.enable(3);
 
           this.camera.lookAt(endPoint);
           this.camera.rotation.z = 0;
-          sealine.focus();
+          this.focusing(boat);
         },
       });
     }
+  }
+
+  focusing(boat) {
+    this.ani && this.ani.pause();
+    const target = { x: 0 };
+    this.ani = anime({
+      targets: target,
+      duration: 1000,
+      // endDelay: 100000000,
+      easing: "easeInQuad",
+      x: 100,
+      autoplay: true,
+      loop: true,
+      update: (a) => {
+        let boatPos = boat.position;
+        this.camera.position.set(boatPos.x + 20, boatPos.y - 70, 120);
+        this.camera.lookAt(boatPos);
+      },
+    });
   }
 
   back() {

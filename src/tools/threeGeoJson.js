@@ -2,7 +2,7 @@ import * as poly2tri from "poly2tri";
 import millerXY from "./millerTransformer";
 
 export default function drawThreeGeo(json, radius, shape, exception) {
-  const AREA_CODE = "ISO_A3";
+  const AREA_CODE = "id";
   var geometries = [];
   var x_values = [];
   var y_values = [];
@@ -108,7 +108,7 @@ export default function drawThreeGeo(json, radius, shape, exception) {
       for (var feature_num = 0; feature_num < json.features.length; feature_num++) {
         geometry_array.push({
           geometry: json.features[feature_num].geometry,
-          code: json.features[feature_num].properties[AREA_CODE]
+          code: json.features[feature_num][AREA_CODE]
         });
       }
     } else if (json.type == "GeometryCollection") {

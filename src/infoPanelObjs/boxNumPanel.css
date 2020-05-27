@@ -19,5 +19,6 @@
 }
 .boxNumPanel .echarts {
   width: 574px;
-  height: 421px;
+  height: 451px;
+  padding:10px;
 }
