@@ -16,32 +16,38 @@ export default class seaLine {
     this.curveArray = [];
     this.curveLength = [];
 
-    let splitpos = [];
+    let splitpos = [0];
 
     for (let i = 0; i < points.length - 1; i++) {
       if (
         Math.abs(points[i].x - points[i + 1].x) >
         SET.earthS * SET.widthScale * 0.7
       ) {
-        splitpos.push(i);
+        splitpos.push(i + 1);
       }
     }
+    // console.log(points, splitpos);
 
-    if (splitpos.length > 0) {
+    if (splitpos.length > 1) {
       let proPoints = points;
       points = [];
-      points.push(proPoints.slice(0, splitpos[0]));
       for (let i = 0; i < splitpos.length; i++) {
-        points.push(proPoints.slice(splitpos[i] + 1, splitpos[i + 1]));
-        let v = points[i][points[i].length - 1];
-        let mapWidth = SET.earthS * SET.widthScale;
-        let left = v.x < mapWidth / 2;
-        points[i].push(new THREE.Vector3(left ? 0 : mapWidth, v.y, v.z));
-        points[i + 1].unshift(new THREE.Vector3(left ? mapWidth : 0, v.y, v.z));
+        let start = splitpos[i],
+          end = splitpos[i + 1] || proPoints.length,
+          child = proPoints.slice(start, end);
+        if (child) points.push(child);
+      }
+      for (let i = 0; i < points.length - 1; i++) {
+        // let v = points[i][points[i].length - 1];
+        // let mapWidth = SET.earthS * SET.widthScale;
+        // let left = v.x < mapWidth / 2;
+        // points[i].push(new THREE.Vector3(left ? 0 : mapWidth, v.y, v.z));
+        // points[i + 1].unshift(new THREE.Vector3(left ? mapWidth : 0, v.y, v.z));
       }
     } else {
       points = [points];
     }
+    // console.log(boat.sealineInfo.lineC, points);
     this.pointArray = points;
 
     this.dashMat = new THREE.LineDashedMaterial({
@@ -52,7 +58,7 @@ export default class seaLine {
     });
     for (let i = 0; i < points.length; i++) {
       let bz = new THREE.SplineCurve(points[i]);
-      let bzPoints = bz.getPoints(100);
+      let bzPoints = bz.getPoints(200);
       bzPoints = bzPoints.map((e) => {
         return new THREE.Vector3(e.x, e.y, 1);
       });
@@ -69,10 +75,10 @@ export default class seaLine {
 
     this.tube = new curveTube(boat.color, scene, boat, this.curveArray);
 
-    this.anime = this.play(0);
+    this.anime = this.play(0, true);
   }
 
-  play(index) {
+  play(index, init = false) {
     let i = index % this.curveArray.length;
     this.playing = i;
     if (this.launcher) {
@@ -101,6 +107,8 @@ export default class seaLine {
       targets: target,
       keyframes: points,
       loop: false,
+      autoplay: !init,
+
       endDelay: i === this.curveArray.length - 1 ? 2000 : 0,
       easing: "linear",
       direction: "alternate",
@@ -114,6 +122,10 @@ export default class seaLine {
         this.anime = this.play(i + 1);
       },
     });
+    if (init) {
+      ani.seek(ani.duration * Math.random());
+      ani.play();
+    }
     return ani;
   }
   getCurve() {

@@ -28,6 +28,16 @@
 .rightPanel #Table :global .ant-table-body {
   background: rgba(0, 0, 0, 0);
 }
+.rightPanel #SubTable :global .ant-table-body {
+  background: rgba(0, 0, 0, 0);
+}
+
+.rightPanel #Table :global .ant-table-fixed {
+  width: 450px !important;
+}
+.rightPanel #SubTable :global .ant-table-fixed {
+  width: 250px !important;
+}
 
 .rightPanel :global .ant-table-scroll ::-webkit-scrollbar {
   width: 0;
@@ -51,6 +61,10 @@
   font-size: 22px;
   line-height: 50px;
   padding: 40px 0;
+}
+.lineTitle{
+  width:100px;
+  line-height: 160px;
 }
 .tagPanel {
   background: rgba(111, 133, 255, 0.1);

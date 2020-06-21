@@ -8,7 +8,7 @@ export default class DayPicker extends Component {
   }
 
   onPick(i) {
-    this.props.onchange(i);
+    this.props.onchange(`W${i + 1}`);
     this.init = false;
   }
 
@@ -23,7 +23,7 @@ export default class DayPicker extends Component {
               key={i}
               value={i}
               onClick={() => this.onPick(i)}
-              checked={this.init ? i == this.days.length - 1 : null}
+              checked={this.init ? i ===0 : null}
             />
             <span>{e}</span>
           </div>

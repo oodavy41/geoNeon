@@ -17,7 +17,7 @@ export default class curveTube {
         new THREE.Mesh(
           new THREE.TubeGeometry(
             new THREE.CatmullRomCurve3(e),
-            100,
+            e.length*10,
             0.2,
             5,
             false

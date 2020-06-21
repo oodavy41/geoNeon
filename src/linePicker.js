@@ -6,10 +6,10 @@ export default class LinePicker extends Component {
     super(props);
     this.init = true;
     this.state = {
-      line: 0
+      line: 0,
     };
     this.lines = Object.keys(this.props.areaInfo);
-    this.lines.push("All");
+    this.lines.push("ALL");
     this.colors = [
       "#ADCCFF",
       "#FF4D4F",
@@ -24,7 +24,7 @@ export default class LinePicker extends Component {
       "#FFEC3D",
       "#0050B3",
       "#006D75",
-      "#FAAD14"
+      "#FAAD14",
     ];
     console.log(this.lines);
   }
@@ -35,6 +35,7 @@ export default class LinePicker extends Component {
   }
 
   render() {
+    const reg = /([\u4e00-\u9fa5]+)/;
     return (
       <div className={styles.line_pick}>
         {this.lines.map((e, i) => {
@@ -49,7 +50,9 @@ export default class LinePicker extends Component {
                 style={{ background: this.colors[i] }}
                 checked={this.init ? i == this.lines.length - 1 : null}
               />
-              <span>{e}</span>
+              <span>
+                {e === "ALL" ? "全部" : reg.exec(this.props.areaInfo[e])[0]}
+              </span>
             </div>
           );
         })}

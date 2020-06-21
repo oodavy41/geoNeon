@@ -112,7 +112,7 @@ export default class WorldMap extends Component {
       boat.color = color;
 
       let { areaC, cmpyC, lineC, day } = pos[i];
-      boat["sealineInfo"] = { areaC, cmpyC, lineC, day };
+      boat["sealineInfo"] = { ...pos[i] };
 
       boat.scale.set(SET.boatSize, SET.boatSize, SET.boatSize);
 
@@ -138,6 +138,8 @@ export default class WorldMap extends Component {
       sl.show(this.scene);
       pos[i]["sealine"] = sl;
     }
+    
+    this.lineFilter(this.props.pickState);
 
     // cities points generator
     for (let k in cities) {
@@ -172,6 +174,8 @@ export default class WorldMap extends Component {
   }
 
   lineFilter(flag) {
+    let picked = {};
+    this.props.pickedLine.forEach((e) => (picked[e.lineC] = true));
     let handeler = (e) => {
       if (e.children || e.children.length > 0) {
         e.children.forEach(handeler);
@@ -179,15 +183,8 @@ export default class WorldMap extends Component {
       let eflag = e.sealineInfo;
 
       if (!eflag) return;
-
-      if (
-        flag.pickLine
-          ? flag.pickLine.lineC === eflag.lineC
-          : (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
-            (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-            (flag.pickComps.find((v) => v === eflag.cmpyC) ||
-              flag.pickComps.length === 0)
-      ) {
+      // console.log(eflag, flag);
+      if (picked[eflag.lineC]) {
         e.layers.set(0);
       } else {
         e.layers.set(1);

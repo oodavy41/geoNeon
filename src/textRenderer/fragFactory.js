@@ -3,8 +3,8 @@ import textFrag from "./fragment";
 export default class FragFactory {
   constructor(font = undefined, color = undefined) {
     this.canvas = document.createElement("canvas");
-    this.canvas.width = 256;
-    this.canvas.height = 20480;
+    this.canvas.width = 512;
+    this.canvas.height = 32768;
     this.ctx = this.canvas.getContext("2d");
     this.defaultFont = font || 20;
     this.defaultColor = color || "#afafaf";
@@ -47,7 +47,7 @@ export default class FragFactory {
           0,
           1 - (yoffset - 4) / this.canvas.height
         ];
-        yoffset += frag.size;
+        yoffset += (frag.size+3);
         frag.height = frag.size;
         frag.width = textWidth.width;
         this.modify = false;
@@ -79,7 +79,7 @@ export default class FragFactory {
         0,
         1 - (yoffset - 4) / this.canvas.height
       ];
-      yoffset += frag.size;
+      yoffset += (frag.size+3);
       frag.height = frag.size;
       frag.width = textWidth.width;
       this.modify = false;

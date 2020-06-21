@@ -2,3 +2,7 @@ node_modules
 dist
 package-lock.json
 .vscode
+/dist
+/node_modules
+geojson2obj
+yarn.lock

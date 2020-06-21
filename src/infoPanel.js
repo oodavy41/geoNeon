@@ -10,6 +10,10 @@ import upIcon from "./sources/up.png";
 import downIcon from "./sources/down.png";
 import lineNums from "./sources/linesCount.json";
 
+const DEFAULTDATA = {
+  boxnum: [{ year: "2020", month: "5", value: "911" }],
+  ontime: [{ year: "2020", month: "5", value: 1 }],
+};
 function dataSplit(raw, rate) {
   let hash = {};
   raw = raw.map((v) => ({ year: +v.year, month: +v.month, value: +v.value }));
@@ -49,8 +53,11 @@ function dataSplit(raw, rate) {
       ya.push(p);
     }
   } else {
-    for (let k in y) {
-      ya.push({ year: k, value: y[k].value });
+    for (let i = 0; i < 7; i++) {
+      ya.push({
+        year: nowyear - i,
+        value: 12000 + Math.random() * 60000,
+      });
     }
     for (let j = 0; j < 2; j++) {
       for (let i = 1; i < 6; i++) {
@@ -67,14 +74,18 @@ function dataSplit(raw, rate) {
         : e.value;
       e.value = e.value.toFixed(0);
     });
+    ya.forEach((e) => {
+      e.value = y[e.year] && y[e.year] > 12000 ? y[e.year].value : e.value;
+      e.value = e.value.toFixed(0);
+    });
+    ya.sort((a, b) => {
+      return a.year - b.year;
+    });
+    ma.sort((a, b) => {
+      return a.year + a.month / 100 - b.year - b.month / 100;
+    });
   }
-  ya.sort((a, b) => {
-    return b.year - a.year;
-  });
-  ma.sort((a, b) => {
-    return b.year + b.month / 100 - a.year - a.month / 100;
-  });
-  ya=ya.slice(0,7)
+  ya = ya.slice(0, 7);
   console.log(raw);
   console.log(ya);
   console.log(ma);
@@ -83,11 +94,12 @@ function dataSplit(raw, rate) {
 
 export default class infoPanel extends Component {
   render() {
-    let info = this.props.lineInfo;
+    let { lineInfo: info, lineId: id } = this.props;
+    console.log(info);
     if (info) {
-      const { id } = info;
       console.log(id, info.lineC);
-      const { boxnum, ontime } = lineNums[id];
+      let idInfo = info.infos.find((e) => e.id === id);
+      const { boxnum, ontime } = lineNums[id]||DEFAULTDATA;
 
       return (
         <div className={styles.lineInfoPanel}>
@@ -105,7 +117,7 @@ export default class infoPanel extends Component {
               className={styles.lineInfoIcon}
               style={{ backgroundImage: `url(${downIcon})` }}
             ></div>
-            {info.cmpyN + "-" + info.cmpyC}
+            {idInfo.cmpyN + "-" + idInfo.cmpyC}
           </div>
           <EchartPanel
             data={{

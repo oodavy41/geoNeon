@@ -98,7 +98,7 @@ export default class Punctuality extends Component {
             },
             data: data
               .slice(7)
-              .map((e) => [`${e.year + 1}-${e.month}`, e.value * 100]),
+              .map((e) => [`${e.year + 1}-${e.month}`, (e.value * 100).toFixed(2)]),
           },
         ],
       });
@@ -114,7 +114,7 @@ export default class Punctuality extends Component {
             to: "#87d068",
           }}
           strokeWidth={15}
-          percent={this.rate}
+          percent={this.rate.toFixed(2)}
           status="active"
         />
         <div className={styles.echarts} ref={(e) => (this.echartDiv = e)} />

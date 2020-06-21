@@ -14,54 +14,63 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pickDay: 7, //0-7
-      pickArea: "All", //area code
+      pickDay: "W1", //0-7
+      pickArea: "ALL", //area code
       pickComps: [], //picked company codes
       pickLine: null,
+      pickId: 0,
+      changed: true,
     };
     this.areas = {};
-    this.areaHash = {};
-    this.sealineData = sealineData
-      .filter((e) => e.points.length > 0)
-      .map((e) => {
-        if (!this.areas[e.areaC]) {
-          this.areas[e.areaC] = Object.keys(this.areas).length + 1;
+    this.cmpys = {};
+    this.sealineData = sealineData.filter((e) => e.points.length > 0);
+    this.sealineData.forEach((e) => {
+      if (!this.areas[e.areaC]) {
+        this.areas[e.areaC] = e.areaN;
+      }
+      e.infos.forEach((f) => {
+        if (!this.cmpys[f.cmpyC]) {
+          this.cmpys[f.cmpyC] = f.cmpyN;
         }
-
-        if (!this.areaHash[e.areaC]) {
-          this.areaHash[e.areaC] = [];
-        }
-        this.areaHash[e.areaC].push(e);
-        if (!e.day) {
-          e.day = Math.round(Math.random() * 7);
-        }
-        return e;
       });
-    this.pickedSealine = sealineData;
+    });
+    console.log(
+      "no Data Lines",
+      JSON.stringify(
+        sealineData.filter((e) => e.points.length === 0).map((e) => e.lineC)
+      )
+    );
+    this.pickedSealine = [];
+    this.filteSealine();
   }
 
   restore() {
     this.setState({
+      pickDay: "W1", //0-7
+      pickArea: "All", //area code
+      pickComps: [], //picked company codes
       pickLine: null,
-      pickDay: 7,
-      pickArea: "All",
+      pickId: 0,
     });
   }
   onPickArea(area) {
-    this.setState({ pickArea: area });
+    this.setState({ pickArea: area, changed: true });
   }
 
   onPickDay(day) {
-    this.setState({ pickDay: day });
+    this.setState({ pickDay: day, changed: true });
   }
 
   onPickComp(comps) {
-    this.setState({ pickComps: comps });
+    this.setState({ pickComps: comps, changed: true });
   }
 
   onPickLine(lineCode) {
-    let line = this.sealineData.find((v) => lineCode === v.lineC);
-    this.setState({ pickLine: line });
+    let line = this.sealineData.find((v) =>
+      v.infos.find((e) => lineCode === e.id)
+    );
+    console.log("line pick", lineCode, line);
+    this.setState({ pickLine: line, pickId: lineCode, changed: true });
   }
 
   offPickLine() {
@@ -71,15 +80,20 @@ export default class App extends Component {
   }
 
   filteSealine() {
-    const flag = this.state;
-    this.pickedSealine = this.sealineData.filter((eflag) => {
-      return (
-        (eflag.areaC === flag.pickArea || flag.pickArea === "All") &&
-        (eflag.day === flag.pickDay || flag.pickDay === 7) &&
-        (flag.pickComps.find((v) => v === eflag.cmpyC) ||
-          flag.pickComps.length === 0)
-      );
-    });
+    if (this.state.changed) {
+      const flag = this.state;
+      this.pickedSealine = this.sealineData.filter((eflag) => {
+        return (
+          (eflag.areaC === flag.pickArea || flag.pickArea === "ALL") &&
+          (eflag.infos.find((f) => f.day === flag.pickDay) ||
+            flag.pickDay === "W8") &&
+          (flag.pickComps.find((v) => eflag.infos.find((e) => e.cmpyC === v)) ||
+            flag.pickComps.length === 0)
+        );
+      });
+      console.log(this.pickedSealine);
+      this.setState({ changed: false });
+    }
     return this.pickedSealine;
   }
   render() {
@@ -88,6 +102,7 @@ export default class App extends Component {
         {/* <div className={styles.title}>上海港全球航线</div> */}
         <WorldMap
           sealine={this.sealineData}
+          pickedLine={this.filteSealine()}
           areaMask={this.areas}
           pickState={this.state}
           offPick={() => this.offPickLine()}
@@ -96,11 +111,12 @@ export default class App extends Component {
           <div>
             <DayPicker onchange={(v) => this.onPickDay(v)} />
             <LinePicker
-              areaInfo={this.areaHash}
+              areaInfo={this.areas}
               onchange={(v) => this.onPickArea(v)}
             />
             <APanel
-              areaInfo={this.areaHash}
+              areaInfo={this.areas}
+              cmpyInfo={this.cmpys}
               pickInfo={this.state}
               onchange={(v) => this.onPickComp(v)}
               onpickline={(v) => this.onPickLine(v)}
@@ -108,7 +124,10 @@ export default class App extends Component {
             />
           </div>
         ) : (
-          <InfoPanel lineInfo={this.state.pickLine} />
+          <InfoPanel
+            lineInfo={this.state.pickLine}
+            lineId={this.state.pickId}
+          />
         )}
       </div>
     );
