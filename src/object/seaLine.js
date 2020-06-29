@@ -64,7 +64,7 @@ export default class seaLine {
         return new THREE.Vector3(e.x, e.y, 1);
       });
       let bz = new THREE.CatmullRomCurve3(path);
-      let bzPoints = bz.getPoints(path.length*2);
+      let bzPoints = bz.getPoints(path.length * 2);
 
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
@@ -121,9 +121,10 @@ export default class seaLine {
       direction: "alternate",
       update: (a) => {
         this.boat.position.set(target.x, target.y, target.z + 0.1);
-        this.launcher.forEach((e) => {
-          e.update && e.update(this.tickTime);
-        });
+        if (this.focusing)
+          this.launcher.forEach((e) => {
+            e.update && e.update(this.tickTime);
+          });
       },
       complete: (a) => {
         this.anime = this.play(i + 1);
@@ -159,6 +160,7 @@ export default class seaLine {
   }
 
   focus() {
+    this.focusing = true;
     if (!this.tube)
       this.tube = new curveTube(
         this.boat.color,
@@ -170,6 +172,7 @@ export default class seaLine {
   }
 
   back() {
+    this.focusing = false;
     this.tube.hide();
   }
 

@@ -31,8 +31,8 @@ export default class particleLauncher extends THREE.Object3D {
     } else {
       let now = t;
       let delta = now - this.last;
-      this.last = now;
       if (this.option.delta && delta > this.option.delta) {
+        this.last = now;
         this.fire();
       }
       this.popQueue.forEach((p) => p.alive && p.update(t));
