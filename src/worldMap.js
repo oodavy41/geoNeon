@@ -16,8 +16,8 @@ import FragFactory from "./textRenderer/fragFactory.js";
 import ParticleLauncher from "./particle/ParticleLauncher.js";
 import anime from "animejs";
 
-import earthNightMap from "./sources/earthNightMap11.png";
-import earthNormalMap from "./sources/earthNormalMap.png";
+import earthNightMap from "./sources/earthNightMap11.jpg";
+import earthNormalMap from "./sources/earthNormalMap.jpg";
 import steamIcon from "./sources/steam.png";
 import boatImg from "./sources/boat.png";
 import beatPoint from "./object/beatPoint.js";
@@ -34,7 +34,17 @@ export default class WorldMap extends Component {
     this.renderer = null;
     this.camera = null;
     this.animationID = 0;
-    this.objs = [];
+    this.ani = { completed: true };
+    this.objs = [
+      {
+        update: (time) => {
+          let ani = this.ani;
+          if (ani && !ani.completed) {
+            ani.tick(time);
+          }
+        },
+      },
+    ];
     this.land = null;
     this.boatBoard = null;
     this.updateStack = [];
@@ -128,7 +138,7 @@ export default class WorldMap extends Component {
       );
       boat.add(particleLauncher);
 
-      let textFrag = this.textFactory.frag(boat, pos[i].lineC, 44, "#f4f4f4");
+      let textFrag = this.textFactory.frag(boat, pos[i].lineC, 88, "#f4f4f4");
       boat.add(textFrag.obj);
 
       let sl = new seaLine(coords, SET.geoLineColor, boat, this.scene, [
@@ -136,9 +146,14 @@ export default class WorldMap extends Component {
         trail,
       ]);
       sl.show(this.scene);
+      this.objs.push({
+        update: (t) => {
+          sl.update(t);
+        },
+      });
       pos[i]["sealine"] = sl;
     }
-    
+
     this.lineFilter(this.props.pickState);
 
     // cities points generator
@@ -148,7 +163,7 @@ export default class WorldMap extends Component {
       let citypos = new THREE.Vector3(cood[0], cood[1], 1);
       let color = "#FFAB00";
       let cityPoint = new beatPoint(0.7, color, citypos);
-      let board = this.textFactory.frag(cityPoint, k, 44, color);
+      let board = this.textFactory.frag(cityPoint, k, 66, color);
       cityPoint.add(board.obj);
       board.obj.position.z = 3;
       board.obj.layers = cityPoint.layers;
@@ -183,11 +198,14 @@ export default class WorldMap extends Component {
       let eflag = e.sealineInfo;
 
       if (!eflag) return;
-      // console.log(eflag, flag);
-      if (picked[eflag.lineC]) {
-        e.layers.set(0);
+      if (flag.pickLine) {
+        flag.pickLine.lineC === eflag.lineC ? e.layers.set(0) : e.layers.set(1);
       } else {
-        e.layers.set(1);
+        if (picked[eflag.lineC]) {
+          e.layers.set(0);
+        } else {
+          e.layers.set(1);
+        }
       }
     };
     this.scene.children.forEach(handeler);
@@ -221,12 +239,14 @@ export default class WorldMap extends Component {
     var directionalLight = new THREE.DirectionalLight(0xffffff);
     this.scene.add(directionalLight);
 
-    this.textFactory = new FragFactory();
+    this.textFactory = new FragFactory(
+      this.renderer.capabilities.getMaxAnisotropy()
+    );
     // this.canvas2.appendChild(this.textFactory.canvas);
   }
 
   focuse(line) {
-    this.ani && this.ani.pause();
+    this.ani && this.ani.pause && this.ani.pause();
     let sealine = line.sealine;
     this.focuseLine = sealine;
     let endPoint = sealine.boat.position;
@@ -246,7 +266,7 @@ export default class WorldMap extends Component {
         x: endPoint.x + 20,
         y: endPoint.y - 70,
         z: 120,
-        autoplay: true,
+        autoplay: false,
         round: 1,
         update: (a) => {
           let boatPos = boat.position;
@@ -277,7 +297,7 @@ export default class WorldMap extends Component {
       // endDelay: 100000000,
       easing: "easeInQuad",
       x: 100,
-      autoplay: true,
+      autoplay: false,
       loop: true,
       update: (a) => {
         let boatPos = boat.position;

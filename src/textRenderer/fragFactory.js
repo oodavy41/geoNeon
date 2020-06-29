@@ -1,88 +1,65 @@
 import * as THREE from "three";
 import textFrag from "./fragment";
 export default class FragFactory {
-  constructor(font = undefined, color = undefined) {
+  constructor( maxAnisotropy,font = undefined, color = undefined) {
     this.canvas = document.createElement("canvas");
-    this.canvas.width = 512;
-    this.canvas.height = 32768;
+    this.canvas.width = 4096;
+    this.canvas.height = 4096;
+    this.yoffset = 3;
+    this.xoffset = 0;
+    this.lineHeight = 0;
     this.ctx = this.canvas.getContext("2d");
-    this.defaultFont = font || 20;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "rgba(30,30,30,0.2)";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.defaultFont = font || 40;
     this.defaultColor = color || "#afafaf";
-    this.modify = true;
 
     this.tex = new THREE.CanvasTexture(this.canvas);
-    this.tex.minFilter = THREE.NearestMipMapNearestFilter;
-    this.frags = [];
+    this.tex.minFilter = THREE.LinearFilter;
+    this.tex.anisotropy = maxAnisotropy;
+    this.frags = {};
   }
 
   frag(parent, text, size = undefined, color = undefined) {
-    let frag = new textFrag(this, this.frags.length, text, size || this.defaultFont, color || this.defaultColor);
+    let frag = this.frags[text];
+    if (!frag) {
+      frag = this.frags[text] = new textFrag(
+        this,
+        this.frags.length,
+        text,
+        size || this.defaultFont,
+        color || this.defaultColor
+      );
+    }
     frag.sealineInfo = parent.sealineInfo;
-    this.frags.push(frag);
-    this.redraw();
     return frag;
   }
 
-  redraw() {
-    if (this.modify) {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.fillStyle = "rgba(30,30,30,0.5)";
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      let yoffset = 10;
-      this.ctx.textBaseline = "top";
-      for (let i = 0; i < this.frags.length; i++) {
-        let frag = this.frags[i];
-        this.ctx.fillStyle = frag.color;
-        this.ctx.font = frag.size + "px Fira Sans";
-        let text = " " + frag.text + " ";
-        let textWidth = this.ctx.measureText(text);
-        this.ctx.fillText(text, 0, yoffset);
-        frag.uvs = [
-          0,
-          1 - (yoffset + frag.size - 4) / this.canvas.height,
-          textWidth.width / this.canvas.width,
-          1 - (yoffset + frag.size - 4) / this.canvas.height,
-          textWidth.width / this.canvas.width,
-          1 - (yoffset - 4) / this.canvas.height,
-          0,
-          1 - (yoffset - 4) / this.canvas.height
-        ];
-        yoffset += (frag.size+3);
-        frag.height = frag.size;
-        frag.width = textWidth.width;
-        this.modify = false;
-      }
-    }
-  }
-
-  forcePaint(color) {
-    console.log("forcePrint");
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle = "rgba(30,30,30,0.5)";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    let yoffset = 10;
+  draw(frag) {
     this.ctx.textBaseline = "top";
-    for (let i = 0; i < this.frags.length; i++) {
-      let frag = this.frags[i];
-      this.ctx.fillStyle = color;
-      this.ctx.font = frag.size + "px Fira Sans";
-      let text = " " + frag.text + " ";
-      let textWidth = this.ctx.measureText(text);
-      this.ctx.fillText(text, 0, yoffset);
-      frag.uvs = [
-        0,
-        1 - (yoffset + frag.size - 4) / this.canvas.height,
-        textWidth.width / this.canvas.width,
-        1 - (yoffset + frag.size - 4) / this.canvas.height,
-        textWidth.width / this.canvas.width,
-        1 - (yoffset - 4) / this.canvas.height,
-        0,
-        1 - (yoffset - 4) / this.canvas.height
-      ];
-      yoffset += (frag.size+3);
-      frag.height = frag.size;
-      frag.width = textWidth.width;
-      this.modify = false;
+    this.ctx.fillStyle = frag.color;
+    this.ctx.font = frag.size + "px Fira Sans";
+    let text = " " + frag.text + " ";
+    let textWidth = this.ctx.measureText(text);
+    this.lineHeight = Math.max(this.lineHeight, frag.size);
+    if (this.xoffset + textWidth.width > this.canvas.width) {
+      this.yoffset += this.lineHeight + 3;
+      this.xoffset = 0;
     }
+    this.ctx.fillText(text, this.xoffset, this.yoffset);
+    frag.uvs = [
+      this.xoffset / this.canvas.width,
+      1 - (this.yoffset + frag.size - 4) / this.canvas.height,
+      (this.xoffset + textWidth.width) / this.canvas.width,
+      1 - (this.yoffset + frag.size - 4) / this.canvas.height,
+      (this.xoffset + textWidth.width) / this.canvas.width,
+      1 - (this.yoffset - 4) / this.canvas.height,
+      this.xoffset / this.canvas.width,
+      1 - (this.yoffset - 4) / this.canvas.height,
+    ];
+    this.xoffset += textWidth.width + 3;
+    frag.height = frag.size;
+    frag.width = textWidth.width;
   }
 }

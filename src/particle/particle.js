@@ -8,7 +8,11 @@ export default class particle {
     this.alive = false;
     this.launcher = launcher;
   }
+  update(t) {
+    !this.anime.completed && this.anime.tick(t);
+  }
   aweak(scene, parent, opt) {
+    this.anime && this.anime.pause();
     this.alive = true;
     let pos = new THREE.Vector3();
     this.launcher.getWorldPosition(pos);
@@ -21,22 +25,26 @@ export default class particle {
     scene.add(this.sprite);
     this.sprite.layers = parent.layers;
     let t = { start: opt.start * 100 };
-    this.anime = anime({
-      targets: t,
-      start: opt.end * 100,
-      round: 1,
-      easing: "easeOutSine",
-      duration: opt.life,
-      update: a => {
-        let _t = (t.start + 1) / 100;
-        this.sprite.scale.set(_t, _t, _t);
-      },
-      complete: a => {
-        this.alive = false;
-        scene.remove(this.sprite);
-      }
-    });
-
+    if (this.anime) {
+      this.anime.restart();
+    } else {
+      this.anime = anime({
+        targets: t,
+        start: opt.end * 100,
+        round: 1,
+        autoplay: false,
+        easing: "easeOutSine",
+        duration: opt.life,
+        update: (a) => {
+          let _t = (t.start + 1) / 100;
+          this.sprite.scale.set(_t, _t, _t);
+        },
+        complete: (a) => {
+          this.alive = false;
+          scene.remove(this.sprite);
+        },
+      });
+    }
     return this;
   }
 }

@@ -8,6 +8,7 @@ const SET = global.Sets;
 export default class seaLine {
   constructor(points, color, boat, scene, pls) {
     this.boat = boat;
+    this.scene = scene;
     this.id = Math.random();
     this.launcher = pls;
     this.color = color;
@@ -15,6 +16,7 @@ export default class seaLine {
     this.pointArray = [];
     this.curveArray = [];
     this.curveLength = [];
+    this.tickTime = 0;
 
     let splitpos = [0];
 
@@ -47,6 +49,7 @@ export default class seaLine {
     } else {
       points = [points];
     }
+    points = points.filter((a) => a.length > 1);
     // console.log(boat.sealineInfo.lineC, points);
     this.pointArray = points;
 
@@ -57,11 +60,12 @@ export default class seaLine {
       dashSize: 1,
     });
     for (let i = 0; i < points.length; i++) {
-      let bz = new THREE.SplineCurve(points[i]);
-      let bzPoints = bz.getPoints(200);
-      bzPoints = bzPoints.map((e) => {
+      let path = points[i].map((e) => {
         return new THREE.Vector3(e.x, e.y, 1);
       });
+      let bz = new THREE.CatmullRomCurve3(path);
+      let bzPoints = bz.getPoints(path.length*2);
+
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
         this.dashMat
@@ -73,12 +77,15 @@ export default class seaLine {
       this.curveArray.push(bzPoints);
     }
 
-    this.tube = new curveTube(boat.color, scene, boat, this.curveArray);
-
     this.anime = this.play(0, true);
   }
 
-  play(index, init = false) {
+  update(t) {
+    this.anime.tick(t);
+    this.tickTime = t;
+  }
+
+  play(index, init) {
     let i = index % this.curveArray.length;
     this.playing = i;
     if (this.launcher) {
@@ -107,7 +114,7 @@ export default class seaLine {
       targets: target,
       keyframes: points,
       loop: false,
-      autoplay: !init,
+      autoplay: false,
 
       endDelay: i === this.curveArray.length - 1 ? 2000 : 0,
       easing: "linear",
@@ -115,7 +122,7 @@ export default class seaLine {
       update: (a) => {
         this.boat.position.set(target.x, target.y, target.z + 0.1);
         this.launcher.forEach((e) => {
-          e.update && e.update();
+          e.update && e.update(this.tickTime);
         });
       },
       complete: (a) => {
@@ -124,7 +131,6 @@ export default class seaLine {
     });
     if (init) {
       ani.seek(ani.duration * Math.random());
-      ani.play();
     }
     return ani;
   }
@@ -153,6 +159,13 @@ export default class seaLine {
   }
 
   focus() {
+    if (!this.tube)
+      this.tube = new curveTube(
+        this.boat.color,
+        this.scene,
+        this.boat,
+        this.curveArray
+      );
     this.tube.show();
   }
 

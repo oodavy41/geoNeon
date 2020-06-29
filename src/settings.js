@@ -6,12 +6,12 @@ global.Sets = {
   heightScale: 1.3,
   widthScale: 1,
 
-  textScale: 0.06,
+  textScale: 0.04,
 
   sealineSpeed: earthS / 90000,
 
-  particleFireTime: 50,
-  particleLife: 1500,
+  particleFireTime: 5000000000,
+  particleLife: 2000,
   particleOpacity: 0.5,
   particleScale: 1.1,
 

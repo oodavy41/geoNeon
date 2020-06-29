@@ -17,22 +17,25 @@ export default class particleLauncher extends THREE.Object3D {
       end: 0.0000001,
       delta: SET.particleFireTime,
       life: SET.particleLife,
-      autoPlay: true
+      autoPlay: true,
     };
     Object.assign(this.option, options);
+    this.last = null;
     this.popQueue = [];
   }
 
-  update() {
+  update(t) {
     if (!this.last) {
       this.fire();
-      this.last = Date.now();
+      this.last = t;
     } else {
-      let now = Date.now();
-      if (now - this.last > this.option.delta) {
-        this.last = now;
+      let now = t;
+      let delta = now - this.last;
+      this.last = now;
+      if (this.option.delta && delta > this.option.delta) {
         this.fire();
       }
+      this.popQueue.forEach((p) => p.alive && p.update(t));
     }
   }
 
@@ -44,14 +47,16 @@ export default class particleLauncher extends THREE.Object3D {
             map: this.texture,
             color: this.color,
             transparent: true,
-            opacity: SET.particleOpacity
+            opacity: SET.particleOpacity,
           }),
           this,
           this.parent
         ).aweak(this.scene, this.parent, this.option)
       );
     } else {
-      this.popQueue.push(this.popQueue.shift().aweak(this.scene, this.parent, this.option));
+      this.popQueue.push(
+        this.popQueue.shift().aweak(this.scene, this.parent, this.option)
+      );
     }
   }
 }

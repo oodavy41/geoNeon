@@ -12,11 +12,11 @@ export default class lineParticle extends THREE.Line {
     super(line, mat);
     this.sealineInfo = parent.sealineInfo;
     let target = { opacity: 100 };
-    let self=this
     this.anime = anime({
       targets: target,
       opacity: 0,
       round: 1,
+      autoplay:false,
       easing: "linear",
       duration: global.Sets.particleLife,
       update: a => {
