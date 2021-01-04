@@ -19,6 +19,7 @@ import anime from "animejs";
 import earthNightMap from "./sources/earthNightMap11.jpg";
 import earthNormalMap from "./sources/earthNormalMap.jpg";
 import steamIcon from "./sources/steam.png";
+import steamAlpha from "./sources/steam.jpg";
 import boatImg from "./sources/boat.png";
 import beatPoint from "./object/beatPoint.js";
 
@@ -101,6 +102,7 @@ export default class WorldMap extends Component {
     //sealine generator
     let pos = this.props.sealine;
     let spriteTex = new THREE.TextureLoader().load(steamIcon);
+    let spriteAlpha = new THREE.TextureLoader().load(steamAlpha);
 
     for (let i = 0; i < pos.length; i++) {
       if (pos[i].points.length === 0) {
@@ -115,6 +117,7 @@ export default class WorldMap extends Component {
       let boat = new THREE.Sprite(
         new THREE.SpriteMaterial({
           map: spriteTex,
+          // alphaMap: spriteAlpha,
           color: color,
           transparent: true,
         })
@@ -132,6 +135,7 @@ export default class WorldMap extends Component {
 
       let particleLauncher = new ParticleLauncher(
         spriteTex,
+        spriteAlpha,
         color,
         boat,
         this.scene
@@ -179,6 +183,8 @@ export default class WorldMap extends Component {
   }
   componentWillUnmount() {
     this.container.removeEventListener("dblclick", this.containerDBclick);
+    cancelAnimationFrame(this.animationID);
+    this.props.sealine.forEach((e) => e.sealine.unmount && e.sealine.unmount());
   }
   componentDidUpdate() {
     let flag = this.props.pickState;

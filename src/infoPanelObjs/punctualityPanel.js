@@ -28,8 +28,6 @@ export default class Punctuality extends Component {
   constructor(props) {
     super(props);
     this.echartDiv = null;
-    let data = this.props.data || def;
-    this.rate = data[0].value * 100;
   }
   componentDidMount() {
     this.updateData();
@@ -39,7 +37,11 @@ export default class Punctuality extends Component {
   }
   updateData() {
     let data = this.props.data || def;
-    this.rate = data[0].value * 100;
+    let nowyearpos = 0,
+      nowyear = data[0].year;
+    data.forEach((e, i) => {
+      if (nowyear === e.year) nowyearpos = Math.max(nowyearpos, i);
+    });
     if (this.echartDiv) {
       this.myChart = echarts.init(this.echartDiv);
       this.myChart.setOption({
@@ -85,7 +87,7 @@ export default class Punctuality extends Component {
               width: 3,
             },
             data: data
-              .slice(0, 7)
+              .slice(0, nowyearpos + 1)
               .map((e) => [`${e.year}-${e.month}`, (e.value * 100).toFixed(2)]),
           },
           {
@@ -97,24 +99,29 @@ export default class Punctuality extends Component {
               width: 3,
             },
             data: data
-              .slice(7)
-              .map((e) => [`${e.year + 1}-${e.month}`, (e.value * 100).toFixed(2)]),
+              .slice(nowyearpos+1)
+              .map((e) => [
+                `${e.year + 1}-${e.month}`,
+                (e.value * 100).toFixed(2),
+              ]),
           },
         ],
       });
     }
   }
   render() {
+    let data = this.props.data || def;
     return (
       <div className={styles.container}>
-        当月准班率: <Progress
+        当月准班率:{" "}
+        <Progress
           style={{ width: 350, height: 50, color: "#fff" }}
           strokeColor={{
             from: "#108ee9",
             to: "#87d068",
           }}
           strokeWidth={15}
-          percent={this.rate.toFixed(2)}
+          percent={+(data[0].value * 100).toFixed(2)}
           status="active"
         />
         <div className={styles.echarts} ref={(e) => (this.echartDiv = e)} />

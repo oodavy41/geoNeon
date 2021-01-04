@@ -24,14 +24,19 @@ export default class lineTrail {
     this.curves[this.index].obj.geometry.computeBoundingSphere();
   }
 
+  unmount() {
+    
+  }
+
   switch(index) {
     if (!this.curves[index]) {
-      let geo = new THREE.BufferGeometry();
-      let mat = this.mat;
-      let line = new THREE.Line(geo, mat);
-      line["sealineInfo"] = this.parent.sealineInfo;
-      this.curves[index] = { obj: line, points: [] };
+        let geo = new THREE.BufferGeometry();
+        let mat = this.mat;
+        let line = new THREE.Line(geo, mat);
+        line["sealineInfo"] = this.parent.sealineInfo;
+        this.curves[index] = { obj: line, points: [] };
     }
+    this.curves[index].obj.geometry.dispose();
     this.curves[index].obj.geometry.setFromPoints(this.curves[this.index].points);
     this.curves[index].obj.layers.mask = this.parent.layers.mask;
     this.scene.add(this.curves[index].obj);

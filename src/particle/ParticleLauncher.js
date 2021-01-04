@@ -5,10 +5,11 @@ import "../settings";
 let SET = global.Sets;
 
 export default class particleLauncher extends THREE.Object3D {
-  constructor(texture, color, parent, scene, options = {}) {
+  constructor(texture, alphaMap, color, parent, scene, options = {}) {
     super();
     this.sealineInfo = parent.sealineInfo;
     this.texture = texture;
+    this.alphaMap = alphaMap;
     this.color = color;
     this.parent = parent;
     this.scene = scene;
@@ -39,12 +40,20 @@ export default class particleLauncher extends THREE.Object3D {
     }
   }
 
+  unmount() {
+    this.popQueue.forEach((p) => {
+      p.unmount();
+    });
+    delete this.popQueue;
+  }
+
   fire() {
     if (this.popQueue.length === 0 || this.popQueue[0].alive) {
       this.popQueue.push(
         new particle(
           new THREE.SpriteMaterial({
             map: this.texture,
+            // alphaMap:this.alphaMap,
             color: this.color,
             transparent: true,
             opacity: SET.particleOpacity,

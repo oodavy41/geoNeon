@@ -3,6 +3,7 @@ import anime from "animejs";
 
 import curveTube from "./curveTube";
 import "../settings";
+import lineTrail from "../particle/lineTrail";
 
 const SET = global.Sets;
 export default class seaLine {
@@ -64,7 +65,7 @@ export default class seaLine {
         return new THREE.Vector3(e.x, e.y, 1);
       });
       let bz = new THREE.CatmullRomCurve3(path);
-      let bzPoints = bz.getPoints(path.length * 2);
+      let bzPoints = bz.getPoints(path.length * 5);
 
       let curve = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(bzPoints),
@@ -85,7 +86,14 @@ export default class seaLine {
     this.tickTime = t;
   }
 
+  unmount() {
+    this.launcher.forEach((e) => e.unmount());
+    this.anime.pause();
+    delete this.anime;
+  }
+
   play(index, init) {
+    let initcount = init ? 5 : 0;
     let i = index % this.curveArray.length;
     this.playing = i;
     if (this.launcher) {
@@ -121,10 +129,14 @@ export default class seaLine {
       direction: "alternate",
       update: (a) => {
         this.boat.position.set(target.x, target.y, target.z + 0.1);
-        if (this.focusing)
-          this.launcher.forEach((e) => {
-            e.update && e.update(this.tickTime);
-          });
+
+        let particle = this.launcher[0],
+          linetrail = this.launcher[1];
+        if (true) {
+          particle.update(this.tickTime);
+        }
+        // if (initcount > 0) initcount--;
+        // else linetrail.update();
       },
       complete: (a) => {
         this.anime = this.play(i + 1);

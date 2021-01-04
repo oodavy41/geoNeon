@@ -1,6 +1,6 @@
 import { Table, Progress, Tag } from "antd";
 import React, { Component } from "react";
-
+import { get, post } from "./request/http";
 import EchartPanel from "./infoPanelObjs/panelContainer";
 
 import styles from "./infoPanel.css";
@@ -8,11 +8,14 @@ import styles from "./infoPanel.css";
 import infoBG from "./sources/sealineInfoBG.png";
 import upIcon from "./sources/up.png";
 import downIcon from "./sources/down.png";
-import lineNums from "./sources/linesCount.json";
-
+const URL = `${
+  process.env.NODE_ENV === "production"
+    ? window.location.origin
+    : "http://10.131.131.62:9080"
+}/visdata/rest/pagemanage/dataset/HX/dataresult`;
 const DEFAULTDATA = {
-  boxnum: [{ year: "2020", month: "5", value: "911" }],
-  ontime: [{ year: "2020", month: "5", value: 1 }],
+  boxnum: [{ year: 2020, month: 5, value: "911" }],
+  ontime: [{ year: 2020, month: 5, value: 1 }],
 };
 function dataSplit(raw, rate) {
   let hash = {};
@@ -26,9 +29,13 @@ function dataSplit(raw, rate) {
   let y = {},
     ya = [],
     ma = [],
-    nowyear = new Date().getFullYear(),
-    nowmonth = new Date().getMonth() + 1;
+    nowyear = 0,
+    nowmonth = 0;
   raw.forEach((e, i) => {
+    if (i === 0) {
+      nowyear = e.year;
+      nowmonth = e.month;
+    }
     if (!y[e.year]) {
       y[e.year] = { year: e.year, value: 0 };
     }
@@ -37,21 +44,11 @@ function dataSplit(raw, rate) {
 
   if (rate) {
     raw.forEach((e, i) => {
-      if (i === 0) {
-        nowyear = e.year;
-        nowmonth = e.month;
-      }
-      if (i < 7 || (i >= 12 && i < 19)) {
+      if (e.year > nowyear - 2 && e.month > nowmonth - 5) {
+        if (e.value === 0) e.value = 0.3;
         ma.push(e);
       }
     });
-    for (let k in y) {
-      let p = y[k];
-      if (p.year == nowyear) {
-        p.value /= nowmonth;
-      }
-      ya.push(p);
-    }
   } else {
     for (let i = 0; i < 7; i++) {
       ya.push({
@@ -60,10 +57,10 @@ function dataSplit(raw, rate) {
       });
     }
     for (let j = 0; j < 2; j++) {
-      for (let i = 1; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         ma.push({
           year: nowyear - j,
-          month: i,
+          month: nowmonth - i,
           value: 1000 + Math.random() * 5000,
         });
       }
@@ -86,20 +83,67 @@ function dataSplit(raw, rate) {
     });
   }
   ya = ya.slice(0, 7);
-  console.log(raw);
-  console.log(ya);
-  console.log(ma);
+  console.log("intput", raw);
+  console.log("year", ya);
+  console.log("month", ma);
   return { year: ya, month: ma };
 }
 
 export default class infoPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.id = 0;
+    this.state = {
+      ...DEFAULTDATA,
+    };
+  }
+
+  componentDidMount() {
+    this.getData(this.props.lineId);
+  }
+
+  componentDidUpdate() {
+    this.getData(this.props.lineId);
+  }
+
+  getData(id) {
+    if (this.id === id) return;
+    post(URL, [
+      { name: "sln_sid", value: id },
+      { name: "type", value: "month" },
+    ]).then((result) => {
+      let { dataResult } = result.data.result;
+      dataResult = JSON.parse(dataResult);
+      dataResult = dataResult.slice(1);
+      console.log("getdata", dataResult);
+      let boxnum = [],
+        ontime = [];
+      dataResult.forEach((e) => {
+        boxnum.push({ year: +e[2], month: +e[3], value: +e[4] });
+        boxnum.push({
+          year: e[2] - 1,
+          month: +e[3],
+          value: +e[5],
+        });
+        ontime.push({ year: +e[2], month: +e[3], value: +e[7] });
+        ontime.push({
+          year: e[2] - 1,
+          month: +e[3],
+          value: +e[9],
+        });
+      });
+      console.log(boxnum, ontime);
+      this.id = id;
+      this.setState({ boxnum, ontime });
+    });
+  }
   render() {
     let { lineInfo: info, lineId: id } = this.props;
     console.log(info);
     if (info) {
       console.log(id, info.lineC);
       let idInfo = info.infos.find((e) => e.id === id);
-      const { boxnum, ontime } = lineNums[id]||DEFAULTDATA;
+      const { boxnum, ontime } = this.state;
 
       return (
         <div className={styles.lineInfoPanel}>

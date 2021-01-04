@@ -1,19 +1,38 @@
 import * as THREE from "three";
-import anime from "animejs";
 
 export default class particle {
   constructor(material, launcher) {
     this.sprite = new THREE.Sprite(material);
-    this.anime = null;
     this.alive = false;
+    this.birth = 0;
     this.launcher = launcher;
+    this.opt = null;
+    this.scene = null;
+    this.lastT = 0;
   }
   update(t) {
-    !this.anime.completed && this.anime.tick(t);
+    if (this.alive) {
+      if (this.birth === 0) this.birth = t;
+      if (t - this.birth < this.opt.life) {
+        let percent = (t - this.birth) / this.opt.life;
+        let _t =
+          this.opt.end +
+          (this.opt.start - this.opt.end) * (1 - Math.min(percent, 1));
+        this.sprite.scale.set(_t, _t, _t);
+      } else {
+        this.alive = false;
+        this.scene.remove(this.sprite);
+      }
+    }
+    this.lastT = t;
   }
+
+  unmount() {}
   aweak(scene, parent, opt) {
-    this.anime && this.anime.pause();
+    this.scene = scene;
+    this.opt = opt;
     this.alive = true;
+    this.birth = 0;
     let pos = new THREE.Vector3();
     this.launcher.getWorldPosition(pos);
     let rad = Math.random() * Math.PI;
@@ -24,27 +43,6 @@ export default class particle {
     this.sprite.position.copy(pos);
     scene.add(this.sprite);
     this.sprite.layers = parent.layers;
-    let t = { start: opt.start * 100 };
-    if (this.anime) {
-      this.anime.restart();
-    } else {
-      this.anime = anime({
-        targets: t,
-        start: opt.end * 100,
-        round: 1,
-        autoplay: false,
-        easing: "easeOutSine",
-        duration: opt.life,
-        update: (a) => {
-          let _t = (t.start + 1) / 100;
-          this.sprite.scale.set(_t, _t, _t);
-        },
-        complete: (a) => {
-          this.alive = false;
-          scene.remove(this.sprite);
-        },
-      });
-    }
     return this;
   }
 }

@@ -28,4 +28,8 @@ export default class lineParticle extends THREE.Line {
       }
     });
   }
+  unmount() {
+    this.anime.pause();
+    delete this.anime;
+  }
 }
