@@ -1,5 +1,6 @@
 node_modules
 dist
+HtmlDist
 package-lock.json
 .vscode
 /dist

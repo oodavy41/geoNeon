@@ -7,12 +7,11 @@
   },
   "private": true,
   "scripts": {
-    "start": "roadhog server",
-    "build": "roadhog build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
-    "prod": "cross-env NODE_ENV=production webpack --config webpack.config.production.js"
+    "prod": "cross-env NODE_ENV=production webpack --config webpack.config.production.js",
+    "html": "cross-env NODE_ENV=production webpack --config webpack.config.html.js"
   },
   "dependencies": {
     "animejs": "^3.0.1",

@@ -1,0 +1,3 @@
+[submodule "geojson2obj"]
+	path = src/geoJsons/geojson2obj
+	url = https://github.com/perliedman/geojson2obj
