@@ -1,4 +1,4 @@
-[Sample Page](http://cocolate.cc/geoNeon/)
+[Sample Page]((https://oodavy41.github.io/geoNeon/)
 
 A World MAP airline/shippingline visualization project
 with opensource data
